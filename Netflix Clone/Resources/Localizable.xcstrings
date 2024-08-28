@@ -62,7 +62,7 @@
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Thịnh hành"
+            "value" : "Đang thịnh hành"
           }
         }
       }
@@ -78,13 +78,13 @@
         }
       }
     },
-    "Upcoming Movies" : {
+    "Upcoming" : {
       "extractionState" : "manual",
       "localizations" : {
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sắp phát hành"
+            "value" : "Sắp ra mắt"
           }
         }
       }

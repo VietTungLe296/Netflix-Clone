@@ -105,8 +105,6 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueCell(MovieCollectionTableViewCell.self, at: indexPath)
-        cell.selectionStyle = .none
-        
         if let movieCaches = movieCaches[indexPath.section] {
             cell.bind(with: movieCaches)
         }

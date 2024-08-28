@@ -19,7 +19,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8LR-tI-Cfs">
                         <rect key="frame" x="0.0" y="0.0" width="111" height="118"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kiN-iu-cr7">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default" translatesAutoresizingMaskIntoConstraints="NO" id="kiN-iu-cr7">
                                 <rect key="frame" x="0.0" y="0.0" width="111" height="118"/>
                             </imageView>
                         </subviews>
@@ -47,4 +47,7 @@
             <point key="canvasLocation" x="176.33587786259542" y="12.67605633802817"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="default" width="335" height="151"/>
+    </resources>
 </document>
