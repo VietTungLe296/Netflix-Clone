@@ -16,7 +16,7 @@ final class HomeBuilder {
         let viewController = HomeViewController(nibName: "HomeViewController", bundle: nil)
         let presenter = HomePresenter(viewController: viewController)
         let router = HomeRouter(viewController: viewController)
-        let interactor = HomeInteractor(presenter: presenter, router: router)
+        let interactor = HomeInteractor(presenter: presenter)
 
         viewController.interactor = interactor
         viewController.router = router

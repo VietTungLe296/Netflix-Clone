@@ -10,6 +10,8 @@ import UIKit
 final class MovieCollectionTableViewCell: UITableViewCell {
     @IBOutlet weak var movieCollectionView: UICollectionView!
     
+    private var movieList = [Movie]()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         setupCollectionView()
@@ -18,22 +20,34 @@ final class MovieCollectionTableViewCell: UITableViewCell {
     func setupCollectionView() {
         movieCollectionView.dataSource = self
         movieCollectionView.delegate = self
-        movieCollectionView.registerCell(UICollectionViewCell.self, nibType: false)
+        movieCollectionView.registerCell(CarouselMovieCollectionViewCell.self)
+    }
+    
+    func bind(with movieList: [Movie]) {
+        self.movieList = movieList
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.movieCollectionView.reloadData()
+        }
     }
 }
 
-extension MovieCollectionTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+extension MovieCollectionTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
+        return movieList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueCell(UICollectionViewCell.self, at: indexPath)
-        cell.backgroundColor = .systemRed
+        let cell = collectionView.dequeueCell(CarouselMovieCollectionViewCell.self, at: indexPath)
+        cell.bind(with: movieList[indexPath.row])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 140, height: 200)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(movieList[indexPath.row].id)
     }
 }

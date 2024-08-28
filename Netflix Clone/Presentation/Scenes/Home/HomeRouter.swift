@@ -9,8 +9,8 @@ import UIKit
 
 protocol HomeRoutingLogic: AnyObject {}
 
-final class HomeRouter: NSObject, HomeRoutingLogic {
-    weak var viewController: HomeViewController?
+final class HomeRouter: HomeRoutingLogic {
+    private weak var viewController: HomeViewController?
 
     init(viewController: HomeViewController?) {
         self.viewController = viewController

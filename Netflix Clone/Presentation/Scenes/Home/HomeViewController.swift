@@ -7,7 +7,9 @@
 
 import UIKit
 
-protocol HomeDisplayLogic: AnyObject {}
+protocol HomeDisplayLogic: AnyObject {
+    func displayFetchedMovies(_ movies: [Movie], forSection section: MovieSection)
+}
 
 final class HomeViewController: UIViewController {
     var interactor: HomeBusinessLogic?
@@ -17,7 +19,9 @@ final class HomeViewController: UIViewController {
     
     @IBOutlet weak var feedTableView: UITableView!
     
-    private let sectionCategories = ["Trending Movies".localized, "Trending TV".localized, "Upcoming".localized, "Top Rated".localized]
+    private let sectionCategories = ["Trending Movies".localized, "Trending TV".localized, "Popular".localized, "Upcoming".localized, "Top Rated".localized]
+    private var movieCaches = [Int: [Movie]]()
+    
     // MARK: View lifecycle
     
     override func viewDidLoad() {
@@ -30,6 +34,11 @@ final class HomeViewController: UIViewController {
 
     private func fetchDataOnLoad() {
         // NOTE: Ask the Interactor to do some work
+        interactor?.fetchTrendingMovies(type: .day, section: .trendingMovies)
+        interactor?.fetchTrendingTvs(type: .day, section: .trendingTvs)
+        interactor?.fetchPopularMovies(section: .popular)
+        interactor?.fetchUpcomingMovies(section: .upcoming)
+        interactor?.fetchTopRatedMovies(section: .topRated)
     }
     
     // MARK: SetupUI
@@ -42,18 +51,18 @@ final class HomeViewController: UIViewController {
     private func setupNavigationBar() {
         let logoButton = UIButton(type: .custom)
         logoButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-        logoButton.setImage(UIImage(named:"netflix-logo"), for: .normal)
+        logoButton.setImage(UIImage(named: "netflix-logo"), for: .normal)
         let logoItem = UIBarButtonItem(customView: logoButton)
         logoItem.customView?.widthAnchor.constraint(equalToConstant: 40).isActive = true
         logoItem.customView?.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        self.navigationItem.leftBarButtonItem = logoItem
+        navigationItem.leftBarButtonItem = logoItem
         
-        self.navigationItem.rightBarButtonItems = [
+        navigationItem.rightBarButtonItems = [
             UIBarButtonItem(image: UIImage(systemName: "person"), style: .done, target: self, action: nil),
             UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil),
         ]
         
-        self.navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.tintColor = .white
     }
     
     private func setupTableView() {
@@ -64,7 +73,16 @@ final class HomeViewController: UIViewController {
     }
 }
 
-extension HomeViewController: HomeDisplayLogic {}
+extension HomeViewController: HomeDisplayLogic {
+    func displayFetchedMovies(_ movies: [Movie], forSection section: MovieSection) {
+        movieCaches[section.rawValue] = movies
+        let indexPath = IndexPath(row: 0, section: section.rawValue)
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.feedTableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+    }
+}
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -88,6 +106,10 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueCell(MovieCollectionTableViewCell.self, at: indexPath)
         cell.selectionStyle = .none
+        
+        if let movieCaches = movieCaches[indexPath.section] {
+            cell.bind(with: movieCaches)
+        }
         return cell
     }
     
@@ -105,10 +127,10 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
 
         if offsetY > 0 {
             // Scrolling up, hide the navigation bar
-            self.navigationController?.setNavigationBarHidden(true, animated: true)
+            navigationController?.setNavigationBarHidden(true, animated: true)
         } else if offsetY < 0 {
             // Scrolling down, show the navigation bar
-            self.navigationController?.setNavigationBarHidden(false, animated: true)
+            navigationController?.setNavigationBarHidden(false, animated: true)
         }
     }
 }
