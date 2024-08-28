@@ -8,7 +8,7 @@
 import UIKit
 
 protocol HomeDisplayLogic: AnyObject {
-    func displayFetchedMovies(_ movies: [Movie], forSection section: MovieSection)
+    func displayFetchedMovieList(_ movieList: [Movie], forSection section: MovieSection)
 }
 
 final class HomeViewController: UIViewController {
@@ -34,11 +34,11 @@ final class HomeViewController: UIViewController {
 
     private func fetchDataOnLoad() {
         // NOTE: Ask the Interactor to do some work
-        interactor?.fetchTrendingMovies(type: .day, section: .trendingMovies)
+        interactor?.fetchTrendingMovieList(type: .day, section: .trendingMovies)
         interactor?.fetchTrendingTvs(type: .day, section: .trendingTvs)
-        interactor?.fetchPopularMovies(section: .popular)
-        interactor?.fetchUpcomingMovies(section: .upcoming)
-        interactor?.fetchTopRatedMovies(section: .topRated)
+        interactor?.fetchPopularMovieList(section: .popular)
+        interactor?.fetchUpcomingMovieList(section: .upcoming)
+        interactor?.fetchTopRatedMovieList(section: .topRated)
     }
     
     // MARK: SetupUI
@@ -74,8 +74,8 @@ final class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: HomeDisplayLogic {
-    func displayFetchedMovies(_ movies: [Movie], forSection section: MovieSection) {
-        movieCaches[section.rawValue] = movies
+    func displayFetchedMovieList(_ movieList: [Movie], forSection section: MovieSection) {
+        movieCaches[section.rawValue] = movieList
         let indexPath = IndexPath(row: 0, section: section.rawValue)
         
         DispatchQueue.main.async { [weak self] in

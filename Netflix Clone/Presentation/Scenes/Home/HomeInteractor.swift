@@ -8,11 +8,11 @@
 import Foundation
 
 protocol HomeBusinessLogic: AnyObject {
-    func fetchTrendingMovies(type: TrendingType, section: MovieSection)
+    func fetchTrendingMovieList(type: TrendingType, section: MovieSection)
     func fetchTrendingTvs(type: TrendingType, section: MovieSection)
-    func fetchPopularMovies(section: MovieSection)
-    func fetchUpcomingMovies(section: MovieSection)
-    func fetchTopRatedMovies(section: MovieSection)
+    func fetchPopularMovieList(section: MovieSection)
+    func fetchUpcomingMovieList(section: MovieSection)
+    func fetchTopRatedMovieList(section: MovieSection)
 }
 
 final class HomeInteractor: HomeBusinessLogic {
@@ -22,7 +22,7 @@ final class HomeInteractor: HomeBusinessLogic {
         self.presenter = presenter
     }
 
-    private func fetchMovies(fetchFunction: @escaping () async throws -> [Movie], section: MovieSection) {
+    private func fetchMovieList(fetchFunction: @escaping () async throws -> [Movie], section: MovieSection) {
         presenter.showLoading()
 
         Task {
@@ -31,10 +31,10 @@ final class HomeInteractor: HomeBusinessLogic {
                     presenter.popLoading()
                 }
 
-                let movies = try await fetchFunction()
+                let movieList = try await fetchFunction()
 
                 await MainActor.run {
-                    presenter.didFetchMovieSuccess(movies, section: section)
+                    presenter.didFetchMovieSuccess(movieList, section: section)
                 }
             } catch {
                 await MainActor.run {
@@ -44,23 +44,23 @@ final class HomeInteractor: HomeBusinessLogic {
         }
     }
 
-    func fetchTrendingMovies(type: TrendingType, section: MovieSection) {
-        fetchMovies(fetchFunction: { try await NetworkManager.shared.fetchTrendingMovies(type: type) }, section: section)
+    func fetchTrendingMovieList(type: TrendingType, section: MovieSection) {
+        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchTrendingMovieList(type: type) }, section: section)
     }
 
     func fetchTrendingTvs(type: TrendingType, section: MovieSection) {
-        fetchMovies(fetchFunction: { try await NetworkManager.shared.fetchTrendingTVs(type: type) }, section: section)
+        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchTrendingTVs(type: type) }, section: section)
     }
 
-    func fetchPopularMovies(section: MovieSection) {
-        fetchMovies(fetchFunction: { try await NetworkManager.shared.fetchPopularMovies() }, section: section)
+    func fetchPopularMovieList(section: MovieSection) {
+        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchPopularMovieList() }, section: section)
     }
 
-    func fetchUpcomingMovies(section: MovieSection) {
-        fetchMovies(fetchFunction: { try await NetworkManager.shared.fetchUpcomingMovies() }, section: section)
+    func fetchUpcomingMovieList(section: MovieSection) {
+        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchUpcomingMovieList() }, section: section)
     }
 
-    func fetchTopRatedMovies(section: MovieSection) {
-        fetchMovies(fetchFunction: { try await NetworkManager.shared.fetchTopRatedMovies() }, section: section)
+    func fetchTopRatedMovieList(section: MovieSection) {
+        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchTopRatedMovieList() }, section: section)
     }
 }

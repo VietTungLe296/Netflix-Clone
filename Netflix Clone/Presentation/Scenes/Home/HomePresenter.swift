@@ -8,7 +8,7 @@
 import UIKit
 
 protocol HomePresentationLogic: Presentable {
-    func didFetchMovieSuccess(_ movies: [Movie], section: MovieSection)
+    func didFetchMovieSuccess(_ movieList: [Movie], section: MovieSection)
     func didFetchMovieFailure(error: Error)
 }
 
@@ -19,8 +19,8 @@ final class HomePresenter: HomePresentationLogic {
         self.viewController = viewController
     }
     
-    func didFetchMovieSuccess(_ movies: [Movie], section: MovieSection) {
-        viewController?.displayFetchedMovies(movies, forSection: section)
+    func didFetchMovieSuccess(_ movieList: [Movie], section: MovieSection) {
+        viewController?.displayFetchedMovieList(movieList, forSection: section)
     }
     
     func didFetchMovieFailure(error: any Error) {

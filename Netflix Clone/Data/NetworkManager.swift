@@ -11,7 +11,7 @@ final class NetworkManager {
     private let baseURL = "https://api.themoviedb.org/3"
     static let shared = NetworkManager()
     
-    func fetchTrendingMovies(type: TrendingType) async throws -> [Movie] {
+    func fetchTrendingMovieList(type: TrendingType) async throws -> [Movie] {
         do {
             let request = try createGetRequest(with: "/trending/movie/\(type.rawValue)")
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -24,8 +24,8 @@ final class NetworkManager {
             
             if let results = jsonObject?["results"] as? [[String: Any]] {
                 let jsonData = try JSONSerialization.data(withJSONObject: results, options: [])
-                let movies = try JSONDecoder().decode([Movie].self, from: jsonData)
-                return movies
+                let movieList = try JSONDecoder().decode([Movie].self, from: jsonData)
+                return movieList
             } else {
                 throw URLError(.badServerResponse)
             }
@@ -34,7 +34,7 @@ final class NetworkManager {
         }
     }
     
-    func fetchUpcomingMovies() async throws -> [Movie] {
+    func fetchUpcomingMovieList() async throws -> [Movie] {
         do {
             let request = try createGetRequest(with: "/movie/upcoming")
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -57,7 +57,7 @@ final class NetworkManager {
         }
     }
     
-    func fetchTopRatedMovies() async throws -> [Movie] {
+    func fetchTopRatedMovieList() async throws -> [Movie] {
         do {
             let request = try createGetRequest(with: "/movie/top_rated")
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -80,7 +80,7 @@ final class NetworkManager {
         }
     }
     
-    func fetchPopularMovies() async throws -> [Movie] {
+    func fetchPopularMovieList() async throws -> [Movie] {
         do {
             let request = try createGetRequest(with: "/movie/popular")
             let (data, response) = try await URLSession.shared.data(for: request)
