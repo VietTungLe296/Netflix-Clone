@@ -61,4 +61,4 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 
-/Config/Config.plist
+Netflix Clone/Config/Config.plist
