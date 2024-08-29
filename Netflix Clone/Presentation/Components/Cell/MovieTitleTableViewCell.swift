@@ -1,5 +1,5 @@
 //
-//  UpcomingMovieTableViewCell.swift
+//  MovieTitleTableViewCell.swift
 //  Netflix Clone
 //
 //  Created by Le Viet Tung on 29/8/24.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class UpcomingMovieTableViewCell: UITableViewCell {
+final class MovieTitleTableViewCell: UITableViewCell {
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     

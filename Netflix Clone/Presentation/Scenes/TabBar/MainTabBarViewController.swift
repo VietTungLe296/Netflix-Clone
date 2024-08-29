@@ -16,14 +16,18 @@ final class MainTabBarViewController: UITabBarController {
 
     private func setupScenes() {
         let homeNC = UINavigationController(rootViewController: HomeBuilder.build())
-        homeNC.tabBarItem.image = UIImage(systemName: "house")
+        homeNC.tabBarItem.image = UIImage(systemName: "house.fill")
         homeNC.title = "Home".localized
 
         let comingSoonNC = UINavigationController(rootViewController: ComingSoonBuilder.build())
         comingSoonNC.tabBarItem.image = UIImage(systemName: "play.circle.fill")
         comingSoonNC.title = "Upcoming".localized
 
-        viewControllers = [homeNC, comingSoonNC]
+        let discoverNC = UINavigationController(rootViewController: DiscoverBuilder.build())
+        discoverNC.tabBarItem.image = UIImage(systemName: "safari.fill")
+        discoverNC.title = "Discover".localized
+        
+        viewControllers = [homeNC, comingSoonNC, discoverNC]
     }
 
     private func setupTabBarAppearance() {

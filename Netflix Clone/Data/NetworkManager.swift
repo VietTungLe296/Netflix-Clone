@@ -126,16 +126,42 @@ final class NetworkManager {
         }
     }
     
-    private func createGetRequest(with path: String) throws -> URLRequest {
+    func fetchDiscoverMovies(includeVideos: Bool, includeAdult: Bool, sortType: DiscoverSortType) async throws -> [Movie] {
+        do {
+            let params = ["include_video": String(includeVideos),
+                          "include_adults": String(includeAdult),
+                          "sort_by": sortType.rawValue]
+            
+            let request = try createGetRequest(with: "/discover/movie", params: params)
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                throw URLError(.badServerResponse)
+            }
+            
+            let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            
+            if let results = jsonObject?["results"] as? [[String: Any]] {
+                let jsonData = try JSONSerialization.data(withJSONObject: results, options: [])
+                let tvs = try JSONDecoder().decode([Movie].self, from: jsonData)
+                return tvs
+            } else {
+                throw URLError(.badServerResponse)
+            }
+        } catch {
+            throw error
+        }
+    }
+    
+    private func createGetRequest(with path: String, params: [String: String] = [:]) throws -> URLRequest {
         guard let url = URL(string: "\(baseURL)\(path)") else {
             throw URLError(.badURL)
         }
         
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
-        
-        let queryItems: [URLQueryItem] = [URLQueryItem(name: "language", value: LanguageManager.shared.isVietnamese ? "vi-VN" : "en-US")]
         components.queryItems = components.queryItems ?? []
-        components.queryItems?.append(contentsOf: queryItems)
+        components.queryItems?.append(URLQueryItem(name: "language", value: LanguageManager.shared.isVietnamese ? "vi-VN" : "en-US"))
+        components.queryItems?.append(contentsOf: params.compactMap { URLQueryItem(name: $0.key, value: $0.value) })
         
         guard let finalURL = components.url else {
             throw URLError(.badURL)
