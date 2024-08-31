@@ -20,7 +20,7 @@ final class MainTabBarViewController: UITabBarController {
         homeNC.title = "Home".localized
 
         let comingSoonNC = UINavigationController(rootViewController: ComingSoonBuilder.build())
-        comingSoonNC.tabBarItem.image = UIImage(systemName: "play.circle.fill")
+        comingSoonNC.tabBarItem.image =  UIImage(systemName: "calendar.circle.fill")
         comingSoonNC.title = "Upcoming".localized
 
         let discoverNC = UINavigationController(rootViewController: DiscoverBuilder.build())
