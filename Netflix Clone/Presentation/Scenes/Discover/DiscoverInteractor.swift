@@ -8,7 +8,7 @@
 import Foundation
 
 protocol DiscoverBusinessLogic: AnyObject {
-    func fetchDiscoverMovies(includeVideos: Bool, includeAdult: Bool, sortType: DiscoverSortType)
+    func fetchDiscoverMovies(page: Int, includeVideos: Bool, includeAdult: Bool, sortType: DiscoverSortType)
 }
 
 final class DiscoverInteractor: DiscoverBusinessLogic {
@@ -17,8 +17,8 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
     init(presenter: DiscoverPresentationLogic) {
         self.presenter = presenter
     }
-    
-    func fetchDiscoverMovies(includeVideos: Bool, includeAdult: Bool, sortType: DiscoverSortType) {
+
+    func fetchDiscoverMovies(page: Int, includeVideos: Bool, includeAdult: Bool, sortType: DiscoverSortType) {
         presenter.showLoading()
 
         Task {
@@ -27,12 +27,13 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
                     presenter.hideLoading()
                 }
 
-                let response = try await NetworkManager.shared.fetchDiscoverMovies(includeVideos: includeVideos,
-                                                                                    includeAdult: includeAdult,
-                                                                                    sortType: sortType)
+                let response = try await NetworkManager.shared.fetchDiscoverMovies(page: page,
+                                                                                   includeVideos: includeVideos,
+                                                                                   includeAdult: includeAdult,
+                                                                                   sortType: sortType)
 
                 await MainActor.run {
-                    presenter.didFetchMovieSuccess(response.movieList)
+                    presenter.didFetchMovieSuccess(response.movieList, totalPages: response.totalPages)
                 }
             } catch {
                 await MainActor.run {

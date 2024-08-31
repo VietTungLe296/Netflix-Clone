@@ -88,9 +88,10 @@ final class NetworkManager {
         }
     }
     
-    func fetchDiscoverMovies(includeVideos: Bool, includeAdult: Bool, sortType: DiscoverSortType) async throws -> FetchMoviesResponse {
+    func fetchDiscoverMovies(page: Int, includeVideos: Bool, includeAdult: Bool, sortType: DiscoverSortType) async throws -> FetchMoviesResponse {
         do {
-            let params = ["include_video": String(includeVideos),
+            let params = ["page": String(page),
+                          "include_video": String(includeVideos),
                           "include_adult": String(includeAdult),
                           "sort_by": sortType.rawValue]
             

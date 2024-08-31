@@ -8,7 +8,7 @@
 import UIKit
 
 protocol DiscoverPresentationLogic: Presentable {
-    func didFetchMovieSuccess(_ movieList: [Movie])
+    func didFetchMovieSuccess(_ movieList: [Movie], totalPages: Int)
     func didFetchMovieFailure(error: any Error)
 }
 
@@ -19,8 +19,8 @@ final class DiscoverPresenter: DiscoverPresentationLogic {
         self.viewController = viewController
     }
     
-    func didFetchMovieSuccess(_ movieList: [Movie]) {
-        viewController?.displayFetchedMovieList(movieList)
+    func didFetchMovieSuccess(_ movieList: [Movie], totalPages: Int) {
+        viewController?.displayFetchedMovieList(movieList, totalPages: totalPages)
     }
 
     func didFetchMovieFailure(error: any Error) {

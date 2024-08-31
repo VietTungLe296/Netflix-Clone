@@ -8,7 +8,7 @@
 import UIKit
 
 protocol DiscoverDisplayLogic: AnyObject {
-    func displayFetchedMovieList(_ movieList: [Movie])
+    func displayFetchedMovieList(_ movieList: [Movie], totalPages: Int)
 }
 
 final class DiscoverViewController: UIViewController {
@@ -30,6 +30,10 @@ final class DiscoverViewController: UIViewController {
     
     private var movieList = [Movie]()
 
+    private var currentPage = 1
+    private var totalPages = 1
+    private var isFetchingMore = false
+    
     // MARK: View lifecycle
     
     override func viewDidLoad() {
@@ -41,7 +45,7 @@ final class DiscoverViewController: UIViewController {
     // MARK: Fetch Search
 
     private func fetchDataOnLoad() {
-        interactor?.fetchDiscoverMovies(includeVideos: false, includeAdult: true, sortType: .popularityDesc)
+        interactor?.fetchDiscoverMovies(page: currentPage, includeVideos: false, includeAdult: true, sortType: .popularityDesc)
     }
     
     // MARK: SetupUI
@@ -73,14 +77,36 @@ final class DiscoverViewController: UIViewController {
         discoverTableView.delegate = self
         discoverTableView.registerCell(MovieTitleTableViewCell.self)
     }
+    
+    private func fetchMovies(page: Int) {
+        if isFetchingMore || movieList.count > 50 {
+            return
+        }
+        
+        isFetchingMore = true
+        interactor?.fetchDiscoverMovies(page: page, includeVideos: false, includeAdult: true, sortType: .popularityDesc)
+    }
 }
 
 extension DiscoverViewController: DiscoverDisplayLogic {
-    func displayFetchedMovieList(_ movieList: [Movie]) {
-        self.movieList = movieList
-        
+    func displayFetchedMovieList(_ movieList: [Movie], totalPages: Int) {
+        self.movieList.append(contentsOf: movieList)
+        self.totalPages = totalPages
+        isFetchingMore = false
+         
         DispatchQueue.main.async { [weak self] in
             self?.discoverTableView.reloadData()
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let height = scrollView.frame.size.height
+            
+        if offsetY > contentHeight - height - 100 && !isFetchingMore && currentPage < totalPages {
+            currentPage += 1
+            fetchMovies(page: currentPage)
         }
     }
 }
