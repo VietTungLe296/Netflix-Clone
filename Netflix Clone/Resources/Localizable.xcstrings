@@ -23,6 +23,17 @@
         }
       }
     },
+    "Hide/Show adult content" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ẩn/Hiện nội dung người lớn"
+          }
+        }
+      }
+    },
     "Home" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -85,6 +96,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Chương trình TV"
+          }
+        }
+      }
+    },
+    "Type here to begin your search..." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nhập để tìm kiếm..."
           }
         }
       }

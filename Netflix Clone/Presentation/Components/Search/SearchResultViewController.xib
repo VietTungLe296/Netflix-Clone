@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchResultViewController" customModule="Netflix_Clone" customModuleProvider="target">
+            <connections>
+                <outlet property="includeAdultLabel" destination="FbX-Ru-Zzd" id="BLD-0X-319"/>
+                <outlet property="includeAdultSwitch" destination="ntZ-ZX-cRd" id="G8N-vU-RhV"/>
+                <outlet property="searchCollectionView" destination="JXA-xE-Wdg" id="9eP-cB-pAM"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ntZ-ZX-cRd">
+                    <rect key="frame" x="16" y="75" width="51" height="31"/>
+                    <connections>
+                        <action selector="didTapSwitch:" destination="-1" eventType="valueChanged" id="ZUb-mP-tnl"/>
+                    </connections>
+                </switch>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="JXA-xE-Wdg">
+                    <rect key="frame" x="8" y="114" width="377" height="704"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="FnT-xx-iFj">
+                        <size key="itemSize" width="128" height="128"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FbX-Ru-Zzd">
+                    <rect key="frame" x="73" y="80.333333333333329" width="304" height="20.333333333333329"/>
+                    <fontDescription key="fontDescription" type="italicSystem" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="VHU-dT-Qut"/>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="ntZ-ZX-cRd" firstAttribute="top" secondItem="VHU-dT-Qut" secondAttribute="top" constant="16" id="923-r4-7is"/>
+                <constraint firstItem="FbX-Ru-Zzd" firstAttribute="leading" secondItem="ntZ-ZX-cRd" secondAttribute="trailing" constant="8" id="Brg-g4-II0"/>
+                <constraint firstItem="ntZ-ZX-cRd" firstAttribute="leading" secondItem="VHU-dT-Qut" secondAttribute="leading" constant="16" id="IWB-0v-dpT"/>
+                <constraint firstItem="JXA-xE-Wdg" firstAttribute="leading" secondItem="VHU-dT-Qut" secondAttribute="leading" constant="8" id="MhT-Px-5LV"/>
+                <constraint firstItem="FbX-Ru-Zzd" firstAttribute="centerY" secondItem="ntZ-ZX-cRd" secondAttribute="centerY" id="NMg-lq-oyb"/>
+                <constraint firstItem="VHU-dT-Qut" firstAttribute="trailing" secondItem="FbX-Ru-Zzd" secondAttribute="trailing" constant="16" id="RKO-hl-dLX"/>
+                <constraint firstItem="JXA-xE-Wdg" firstAttribute="top" secondItem="ntZ-ZX-cRd" secondAttribute="bottom" constant="8" id="TdG-zL-0Kl"/>
+                <constraint firstItem="VHU-dT-Qut" firstAttribute="bottom" secondItem="JXA-xE-Wdg" secondAttribute="bottom" id="U2r-dI-G5O"/>
+                <constraint firstItem="VHU-dT-Qut" firstAttribute="trailing" secondItem="JXA-xE-Wdg" secondAttribute="trailing" constant="8" id="qaX-s6-5jh"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-28.244274809160306" y="-11.267605633802818"/>
+        </view>
+    </objects>
+</document>

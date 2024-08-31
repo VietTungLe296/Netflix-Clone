@@ -47,8 +47,8 @@ final class NetworkManager {
             
             if let results = jsonObject?["results"] as? [[String: Any]] {
                 let jsonData = try JSONSerialization.data(withJSONObject: results, options: [])
-                let tvs = try JSONDecoder().decode([Movie].self, from: jsonData)
-                return tvs
+                let movieList = try JSONDecoder().decode([Movie].self, from: jsonData)
+                return movieList
             } else {
                 throw URLError(.badServerResponse)
             }
@@ -70,8 +70,8 @@ final class NetworkManager {
             
             if let results = jsonObject?["results"] as? [[String: Any]] {
                 let jsonData = try JSONSerialization.data(withJSONObject: results, options: [])
-                let tvs = try JSONDecoder().decode([Movie].self, from: jsonData)
-                return tvs
+                let movieList = try JSONDecoder().decode([Movie].self, from: jsonData)
+                return movieList
             } else {
                 throw URLError(.badServerResponse)
             }
@@ -93,8 +93,8 @@ final class NetworkManager {
             
             if let results = jsonObject?["results"] as? [[String: Any]] {
                 let jsonData = try JSONSerialization.data(withJSONObject: results, options: [])
-                let tvs = try JSONDecoder().decode([Movie].self, from: jsonData)
-                return tvs
+                let movieList = try JSONDecoder().decode([Movie].self, from: jsonData)
+                return movieList
             } else {
                 throw URLError(.badServerResponse)
             }
@@ -129,7 +129,7 @@ final class NetworkManager {
     func fetchDiscoverMovies(includeVideos: Bool, includeAdult: Bool, sortType: DiscoverSortType) async throws -> [Movie] {
         do {
             let params = ["include_video": String(includeVideos),
-                          "include_adults": String(includeAdult),
+                          "include_adult": String(includeAdult),
                           "sort_by": sortType.rawValue]
             
             let request = try createGetRequest(with: "/discover/movie", params: params)
@@ -143,8 +143,34 @@ final class NetworkManager {
             
             if let results = jsonObject?["results"] as? [[String: Any]] {
                 let jsonData = try JSONSerialization.data(withJSONObject: results, options: [])
-                let tvs = try JSONDecoder().decode([Movie].self, from: jsonData)
-                return tvs
+                let movieList = try JSONDecoder().decode([Movie].self, from: jsonData)
+                return movieList
+            } else {
+                throw URLError(.badServerResponse)
+            }
+        } catch {
+            throw error
+        }
+    }
+    
+    func searchMovies(with keyword: String, includeAdult: Bool) async throws -> [Movie] {
+        do {
+            let params = ["query": keyword,
+                          "include_adult": String(includeAdult)]
+            
+            let request = try createGetRequest(with: "/search/movie", params: params)
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                throw URLError(.badServerResponse)
+            }
+            
+            let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            
+            if let results = jsonObject?["results"] as? [[String: Any]] {
+                let jsonData = try JSONSerialization.data(withJSONObject: results, options: [])
+                let movieList = try JSONDecoder().decode([Movie].self, from: jsonData)
+                return movieList
             } else {
                 throw URLError(.badServerResponse)
             }

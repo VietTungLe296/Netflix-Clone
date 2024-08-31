@@ -17,6 +17,7 @@ struct Movie: Codable {
     let voteCount: Int?
     let voteAverage: Double?
     let releaseDate: String?
+    let adult: Bool?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -28,6 +29,7 @@ struct Movie: Codable {
         case voteCount = "vote_count"
         case voteAverage = "vote_average"
         case releaseDate = "release_date"
+        case adult
     }
 
     var imageURL: URL? {

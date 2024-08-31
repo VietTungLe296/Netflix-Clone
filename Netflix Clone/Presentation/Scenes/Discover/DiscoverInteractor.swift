@@ -24,7 +24,7 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
         Task {
             do {
                 defer {
-                    presenter.popLoading()
+                    presenter.hideLoading()
                 }
 
                 let movieList = try await NetworkManager.shared.fetchDiscoverMovies(includeVideos: includeVideos,
