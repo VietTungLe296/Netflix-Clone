@@ -205,6 +205,7 @@
 		6C6B82252C676337006A9DAD /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				6C6F047C2C81F0BE00213AB1 /* Search */,
 				6C6F046E2C81326300213AB1 /* Discover */,
 				6C6F045C2C7F54B600213AB1 /* Upcoming */,
 				6CB727C42C6764C80008F9E2 /* Home */,
@@ -314,7 +315,6 @@
 		6C6F047B2C8133C300213AB1 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				6C6F047C2C81F0BE00213AB1 /* Search */,
 				6C6F04692C7FDBB400213AB1 /* Cell */,
 			);
 			path = Components;
