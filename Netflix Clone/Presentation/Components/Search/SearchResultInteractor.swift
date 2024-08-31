@@ -27,10 +27,10 @@ final class SearchResultInteractor: SearchResultBusinessLogic {
                     presenter.hideLoading()
                 }
 
-                let movieList = try await NetworkManager.shared.searchMovies(with: keyword, includeAdult: includeAdult)
+                let response = try await NetworkManager.shared.searchMovies(with: keyword, includeAdult: includeAdult)
 
                 await MainActor.run {
-                    presenter.didFetchMovieSuccess(movieList)
+                    presenter.didFetchMovieSuccess(response.movieList)
                 }
             } catch {
                 await MainActor.run {

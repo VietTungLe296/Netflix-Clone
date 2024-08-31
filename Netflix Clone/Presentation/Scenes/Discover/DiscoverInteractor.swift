@@ -27,12 +27,12 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
                     presenter.hideLoading()
                 }
 
-                let movieList = try await NetworkManager.shared.fetchDiscoverMovies(includeVideos: includeVideos,
+                let response = try await NetworkManager.shared.fetchDiscoverMovies(includeVideos: includeVideos,
                                                                                     includeAdult: includeAdult,
                                                                                     sortType: sortType)
 
                 await MainActor.run {
-                    presenter.didFetchMovieSuccess(movieList)
+                    presenter.didFetchMovieSuccess(response.movieList)
                 }
             } catch {
                 await MainActor.run {

@@ -22,7 +22,7 @@ final class HomeInteractor: HomeBusinessLogic {
         self.presenter = presenter
     }
 
-    private func fetchMovieList(fetchFunction: @escaping () async throws -> [Movie], section: MovieSection) {
+    private func fetchMovieList(fetchFunction: @escaping () async throws -> FetchMoviesResponse, section: MovieSection) {
         presenter.showLoading()
 
         Task {
@@ -31,10 +31,10 @@ final class HomeInteractor: HomeBusinessLogic {
                     presenter.popLoading()
                 }
 
-                let movieList = try await fetchFunction()
+                let response = try await fetchFunction()
 
                 await MainActor.run {
-                    presenter.didFetchMovieSuccess(movieList, section: section)
+                    presenter.didFetchMovieSuccess(response.movieList, section: section)
                 }
             } catch {
                 await MainActor.run {

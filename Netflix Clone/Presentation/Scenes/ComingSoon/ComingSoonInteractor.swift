@@ -27,10 +27,10 @@ final class ComingSoonInteractor: ComingSoonBusinessLogic {
                     presenter.popLoading()
                 }
 
-                let movieList = try await NetworkManager.shared.fetchUpcomingMovieList()
+                let response = try await NetworkManager.shared.fetchUpcomingMovieList()
 
                 await MainActor.run {
-                    presenter.didFetchMovieSuccess(movieList)
+                    presenter.didFetchMovieSuccess(response.movieList)
                 }
             } catch {
                 await MainActor.run {
