@@ -34,7 +34,7 @@ final class HomeInteractor: HomeBusinessLogic {
                 let response = try await fetchFunction()
 
                 await MainActor.run {
-                    presenter.didFetchMovieSuccess(response.movieList, section: section)
+                    presenter.didFetchMovieSuccess(response.movieList.filter { $0.imageURL != nil }, section: section)
                 }
             } catch {
                 await MainActor.run {

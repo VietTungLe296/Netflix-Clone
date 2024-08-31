@@ -75,7 +75,14 @@ final class HomeViewController: UIViewController {
 
 extension HomeViewController: HomeDisplayLogic {
     func displayFetchedMovieList(_ movieList: [Movie], forSection section: MovieSection) {
-        movieCaches[section.rawValue] = movieList
+        if section == .trendingMovies {
+            (feedTableView.tableHeaderView as? BannerHeaderView)?.bind(with: Array(movieList.prefix(5)))
+            
+            movieCaches[section.rawValue] = Array(movieList.dropFirst(5))
+        } else {
+            movieCaches[section.rawValue] = movieList
+        }
+        
         let indexPath = IndexPath(row: 0, section: section.rawValue)
         
         DispatchQueue.main.async { [weak self] in
