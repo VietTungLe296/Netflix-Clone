@@ -57,7 +57,7 @@ final class HomeInteractor: HomeBusinessLogic {
     }
 
     func fetchUpcomingMovieList(section: MovieSection) {
-        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchUpcomingMovieList() }, section: section)
+        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchUpcomingMovieList(page: 1) }, section: section)
     }
 
     func fetchTopRatedMovieList(section: MovieSection) {

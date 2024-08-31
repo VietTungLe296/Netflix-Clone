@@ -26,9 +26,11 @@ final class NetworkManager {
         }
     }
     
-    func fetchUpcomingMovieList() async throws -> FetchMoviesResponse {
+    func fetchUpcomingMovieList(page: Int) async throws -> FetchMoviesResponse {
         do {
-            let request = try createGetRequest(with: "/movie/upcoming")
+            let params = ["page": String(page)]
+            
+            let request = try createGetRequest(with: "/movie/upcoming", params: params)
             let (data, response) = try await URLSession.shared.data(for: request)
             
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {

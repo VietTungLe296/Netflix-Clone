@@ -1,5 +1,5 @@
 //
-//  ComingSoonViewController.swift
+//  UpcomingViewController.swift
 //  Netflix Clone
 //
 //  Created by Le Viet Tung on 28/8/24.
@@ -7,18 +7,22 @@
 
 import UIKit
 
-protocol ComingSoonDisplayLogic: AnyObject {
-    func displayFetchedMovieList(_ movieList: [Movie])
+protocol UpcomingDisplayLogic: AnyObject {
+    func displayFetchedMovieList(_ movieList: [Movie], totalPages: Int)
 }
 
-final class ComingSoonViewController: UIViewController {
-    var interactor: ComingSoonBusinessLogic?
-    var router: ComingSoonRoutingLogic?
+final class UpcomingViewController: UIViewController {
+    var interactor: UpcomingBusinessLogic?
+    var router: UpcomingRoutingLogic?
     
     @IBOutlet weak var upcomingTableView: UITableView!
     
     private var movieList = [Movie]()
-
+    
+    private var currentPage = 1
+    private var totalPages = 1
+    private var isFetchingMore = false
+    
     // MARK: View lifecycle
     
     override func viewDidLoad() {
@@ -27,10 +31,10 @@ final class ComingSoonViewController: UIViewController {
         fetchDataOnLoad()
     }
    
-    // MARK: Fetch ComingSoon
+    // MARK: Fetch Upcoming
 
     private func fetchDataOnLoad() {
-        interactor?.fetchUpcomingMovieList()
+        interactor?.fetchUpcomingMovieList(page: currentPage)
     }
     
     // MARK: SetupUI
@@ -51,19 +55,41 @@ final class ComingSoonViewController: UIViewController {
         upcomingTableView.delegate = self
         upcomingTableView.registerCell(MovieTitleTableViewCell.self)
     }
+    
+    private func fetchMovies(page: Int) {
+        if isFetchingMore || movieList.count > 30 {
+            return
+        }
+        
+        isFetchingMore = true
+        interactor?.fetchUpcomingMovieList(page: page)
+    }
 }
 
-extension ComingSoonViewController: ComingSoonDisplayLogic {
-    func displayFetchedMovieList(_ movieList: [Movie]) {
-        self.movieList = movieList
+extension UpcomingViewController: UpcomingDisplayLogic {
+    func displayFetchedMovieList(_ movieList: [Movie], totalPages: Int) {
+        self.movieList.append(contentsOf: movieList)
+        self.totalPages = totalPages
+        isFetchingMore = false
         
         DispatchQueue.main.async { [weak self] in
             self?.upcomingTableView.reloadData()
         }
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let height = scrollView.frame.size.height
+            
+        if offsetY > contentHeight - height - 100 && !isFetchingMore && currentPage < totalPages {
+            currentPage += 1
+            fetchMovies(page: currentPage)
+        }
+    }
 }
 
-extension ComingSoonViewController: UITableViewDataSource, UITableViewDelegate {
+extension UpcomingViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movieList.count
     }
