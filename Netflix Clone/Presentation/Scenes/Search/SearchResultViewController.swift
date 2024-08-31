@@ -83,7 +83,7 @@ final class SearchResultViewController: UIViewController, SearchResultUpdating {
 
 extension SearchResultViewController: SearchResultDisplayLogic {
     func displayFetchedMovieList(_ movieList: [Movie]) {
-        self.movieList = movieList.filter { $0.imageURL != nil }
+        self.movieList = movieList
         isIncludeAdult = includeAdultSwitch.isOn
     }
 }

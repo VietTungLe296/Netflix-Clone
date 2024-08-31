@@ -17,7 +17,7 @@ final class SearchResultInteractor: SearchResultBusinessLogic {
     init(presenter: SearchResultPresentationLogic) {
         self.presenter = presenter
     }
-    
+
     func searchMovies(with keyword: String, includeAdult: Bool) {
         presenter.showLoading()
 
@@ -30,7 +30,7 @@ final class SearchResultInteractor: SearchResultBusinessLogic {
                 let response = try await NetworkManager.shared.searchMovies(with: keyword, includeAdult: includeAdult)
 
                 await MainActor.run {
-                    presenter.didFetchMovieSuccess(response.movieList)
+                    presenter.didFetchMovieSuccess(response.movieList.filter { $0.imageURL != nil })
                 }
             } catch {
                 await MainActor.run {
