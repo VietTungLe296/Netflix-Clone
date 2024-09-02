@@ -26,16 +26,31 @@ final class ActionButtonView: UIView {
         layer.cornerRadius = 8
     }
 
-    func setup(backgroundColor: UIColor,
-               title: String, titleColor: UIColor,
-               image: UIImage, imageTintColor: UIColor)
-    {
-        self.backgroundColor = backgroundColor
+    @IBInspectable
+    var title: String? {
+        didSet {
+            titleLabel.text = title?.localized
+        }
+    }
 
-        titleLabel.text = title
-        titleLabel.textColor = titleColor
+    @IBInspectable
+    var titleColor: UIColor? {
+        didSet {
+            titleLabel.textColor = titleColor
+        }
+    }
 
-        imageView.image = image
-        imageView.tintColor = imageTintColor
+    @IBInspectable
+    var image: UIImage? {
+        didSet {
+            imageView.image = image
+        }
+    }
+
+    @IBInspectable
+    var imageTintColor: UIColor? {
+        didSet {
+            imageView.tintColor = imageTintColor
+        }
     }
 }

@@ -7,8 +7,14 @@
 
 import UIKit
 
+protocol MovieCollectionTableCellDelegate: AnyObject {
+    func didTapMovie(_ movie: Movie)
+}
+
 final class MovieCollectionTableViewCell: UITableViewCell {
     @IBOutlet weak var movieCollectionView: UICollectionView!
+    
+    weak var delegate: MovieCollectionTableCellDelegate?
     
     private var movieList = [Movie]()
     
@@ -48,6 +54,8 @@ extension MovieCollectionTableViewCell: UICollectionViewDataSource, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(movieList[indexPath.row].id)
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        delegate?.didTapMovie(movieList[indexPath.row])
     }
 }

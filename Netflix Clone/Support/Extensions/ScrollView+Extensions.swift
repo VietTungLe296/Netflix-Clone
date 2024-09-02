@@ -29,6 +29,17 @@ extension UICollectionView {
                        forSupplementaryViewOfKind: kind,
                        withReuseIdentifier: String(describing: anyClass))
     }
+
+    func currentCenteredItemIndex() -> IndexPath? {
+        let visibleRect = CGRect(origin: self.contentOffset, size: self.bounds.size)
+        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+            
+        if let indexPath = indexPathForItem(at: visiblePoint) {
+            return indexPath
+        }
+            
+        return nil
+    }
 }
 
 extension UITableView {

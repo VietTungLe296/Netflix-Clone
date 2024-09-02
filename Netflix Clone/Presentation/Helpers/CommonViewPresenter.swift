@@ -15,10 +15,10 @@ final class CommonViewPresenter {
         SVProgressHUD.dismiss()
     }
 
-    func showLoadingView() {
+    func showLoadingView(maskType: SVProgressHUDMaskType = .none) {
         SVProgressHUD.show()
         SVProgressHUD.setDefaultStyle(.automatic)
-        SVProgressHUD.setDefaultMaskType(.none)
+        SVProgressHUD.setDefaultMaskType(maskType)
         SVProgressHUD.setBackgroundLayerColor(UIColor.black.withAlphaComponent(0.1))
         SVProgressHUD.setBackgroundColor(UIColor.black.withAlphaComponent(0.6))
         SVProgressHUD.setForegroundColor(.white)

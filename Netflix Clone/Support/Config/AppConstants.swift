@@ -8,5 +8,7 @@
 import Foundation
 
 enum AppConstants {
-    static let API_KEY = "077ba0a90ef36b1c82c6d031b1c2d35e"
+    static let YOUTUBE_EMBED = "https://youtube.com/embed/"
+    static let movieDBBaseURL = "https://api.themoviedb.org/3"
+    static let youtubeBaseURL = "https://www.googleapis.com/youtube/v3/search"
 }

@@ -7,11 +7,17 @@
 
 import UIKit
 
+protocol BannerHeaderViewDelegate: AnyObject {
+    func didTapMovie(_ movie: Movie)
+}
+
 final class BannerHeaderView: UIView {
     @IBOutlet weak var carouselCollectionView: UICollectionView!
     @IBOutlet weak var playButton: ActionButtonView!
     @IBOutlet weak var downloadButton: ActionButtonView!
     @IBOutlet weak var carouselPageControl: UIPageControl!
+    
+    weak var delegate: BannerHeaderViewDelegate?
     
     private var movieList = [Movie]()
     
@@ -29,7 +35,7 @@ final class BannerHeaderView: UIView {
     }
     
     deinit {
-        timer?.invalidate()
+        stopTimer()
     }
 
     private func commonInit() {
@@ -39,13 +45,7 @@ final class BannerHeaderView: UIView {
     }
     
     private func setupButtons() {
-        playButton.setup(backgroundColor: .red,
-                         title: "Play".localized, titleColor: .white,
-                         image: UIImage(systemName: "play.circle.fill")!, imageTintColor: .white)
-        
-        downloadButton.setup(backgroundColor: .white,
-                             title: "Download".localized, titleColor: .black,
-                             image: UIImage(systemName: "arrow.down.circle.fill")!, imageTintColor: .black)
+        playButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapPlay)))
     }
     
     private func setupCollectionView() {
@@ -59,8 +59,23 @@ final class BannerHeaderView: UIView {
         carouselCollectionView.registerCell(CarouselMovieCollectionViewCell.self)
     }
     
-    private func setupTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(updatePageControlAndScroll), userInfo: nil, repeats: true)
+    func setTimer() {
+        if timer == nil && !movieList.isEmpty {
+            timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(updatePageControlAndScroll), userInfo: nil, repeats: true)
+        }
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    @objc private func didTapPlay() {
+        guard let currentIndexPath = carouselCollectionView.currentCenteredItemIndex() else {
+            return
+        }
+        
+        delegate?.didTapMovie(movieList[currentIndexPath.row])
     }
     
     @objc private func updatePageControlAndScroll() {
@@ -80,7 +95,7 @@ final class BannerHeaderView: UIView {
         self.movieList = movieList
         
         carouselPageControl.numberOfPages = movieList.count
-        setupTimer()
+        setTimer()
         
         DispatchQueue.main.async { [weak self] in
             self?.carouselCollectionView.reloadData()
@@ -99,6 +114,12 @@ extension BannerHeaderView: UICollectionViewDataSource, UICollectionViewDelegate
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        delegate?.didTapMovie(movieList[indexPath.row])
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
         let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
@@ -113,6 +134,6 @@ extension BannerHeaderView: UICollectionViewDataSource, UICollectionViewDelegate
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        setupTimer()
+        stopTimer()
     }
 }

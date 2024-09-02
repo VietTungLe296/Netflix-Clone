@@ -37,3 +37,17 @@ struct Movie: Codable {
         return URL(string: "https://image.tmdb.org/t/p/w500/\(posterPath)")
     }
 }
+
+struct FetchMoviesResponse: Codable {
+    let movieList: [Movie]
+    let currentPage: Int
+    let totalPages: Int
+    let totalResults: Int
+
+    enum CodingKeys: String, CodingKey {
+        case movieList = "results"
+        case currentPage = "page"
+        case totalPages = "total_pages"
+        case totalResults = "total_results"
+    }
+}

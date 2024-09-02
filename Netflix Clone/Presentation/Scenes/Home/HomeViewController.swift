@@ -9,6 +9,7 @@ import UIKit
 
 protocol HomeDisplayLogic: AnyObject {
     func displayFetchedMovieList(_ movieList: [Movie], forSection section: MovieSection)
+    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId)
 }
 
 final class HomeViewController: UIViewController {
@@ -29,16 +30,22 @@ final class HomeViewController: UIViewController {
         setupView()
         fetchDataOnLoad()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        (feedTableView.tableHeaderView as? BannerHeaderView)?.setTimer()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        (feedTableView.tableHeaderView as? BannerHeaderView)?.stopTimer()
+    }
    
     // MARK: Fetch Home
 
     private func fetchDataOnLoad() {
         // NOTE: Ask the Interactor to do some work
-        interactor?.fetchTrendingMovieList(type: .day, section: .trendingMovies)
-        interactor?.fetchTrendingTvs(type: .day, section: .trendingTvs)
-        interactor?.fetchPopularMovieList(section: .popular)
-        interactor?.fetchUpcomingMovieList(section: .upcoming)
-        interactor?.fetchTopRatedMovieList(section: .topRated)
+        interactor?.fetchMovieData()
     }
     
     // MARK: SetupUI
@@ -69,7 +76,10 @@ final class HomeViewController: UIViewController {
         feedTableView.dataSource = self
         feedTableView.delegate = self
         feedTableView.registerCell(MovieCollectionTableViewCell.self)
-        feedTableView.tableHeaderView = BannerHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
+        
+        let bannerHeaderView = BannerHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
+        bannerHeaderView.delegate = self
+        feedTableView.tableHeaderView = bannerHeaderView
     }
 }
 
@@ -88,6 +98,10 @@ extension HomeViewController: HomeDisplayLogic {
         DispatchQueue.main.async { [weak self] in
             self?.feedTableView.reloadRows(at: [indexPath], with: .automatic)
         }
+    }
+    
+    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId) {
+        router?.goToPreviewScreen(of: movie, with: videoId)
     }
 }
 
@@ -114,6 +128,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueCell(MovieCollectionTableViewCell.self, at: indexPath)
         if let movieCaches = movieCaches[indexPath.section] {
             cell.bind(with: movieCaches)
+            cell.delegate = self
         }
         return cell
     }
@@ -137,5 +152,11 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
             // Scrolling down, show the navigation bar
             navigationController?.setNavigationBarHidden(false, animated: true)
         }
+    }
+}
+
+extension HomeViewController: MovieCollectionTableCellDelegate, BannerHeaderViewDelegate {
+    func didTapMovie(_ movie: Movie) {
+        interactor?.fetchYoutubeTrailer(for: movie)
     }
 }

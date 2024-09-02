@@ -6,16 +6,17 @@
 //
 
 import Foundation
+import SVProgressHUD
 
 protocol Presentable: AnyObject {
-    func showLoading()
+    func showLoading(maskType: SVProgressHUDMaskType)
     func hideLoading()
     func popLoading()
 }
 
 extension Presentable {
-    func showLoading() {
-        CommonViewPresenter.shared.showLoadingView()
+    func showLoading(maskType: SVProgressHUDMaskType = .none) {
+        CommonViewPresenter.shared.showLoadingView(maskType: maskType)
     }
     
     func hideLoading() {

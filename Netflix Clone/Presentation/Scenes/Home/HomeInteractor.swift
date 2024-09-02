@@ -8,11 +8,8 @@
 import Foundation
 
 protocol HomeBusinessLogic: AnyObject {
-    func fetchTrendingMovieList(type: TrendingType, section: MovieSection)
-    func fetchTrendingTvs(type: TrendingType, section: MovieSection)
-    func fetchPopularMovieList(section: MovieSection)
-    func fetchUpcomingMovieList(section: MovieSection)
-    func fetchTopRatedMovieList(section: MovieSection)
+    func fetchMovieData()
+    func fetchYoutubeTrailer(for movie: Movie)
 }
 
 final class HomeInteractor: HomeBusinessLogic {
@@ -22,45 +19,98 @@ final class HomeInteractor: HomeBusinessLogic {
         self.presenter = presenter
     }
 
-    private func fetchMovieList(fetchFunction: @escaping () async throws -> FetchMoviesResponse, section: MovieSection) {
-        presenter.showLoading()
+    func fetchMovieData() {
+        Task {
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    self.fetchTrendingMovieList(type: .day, section: .trendingMovies)
+                }
+                group.addTask {
+                    self.fetchTrendingTvs(type: .day, section: .trendingTvs)
+                }
+                group.addTask {
+                    self.fetchPopularMovieList(section: .popular)
+                }
+                group.addTask {
+                    self.fetchUpcomingMovieList(section: .upcoming)
+                }
+                group.addTask {
+                    self.fetchTopRatedMovieList(section: .topRated)
+                }
+            }
+        }
+    }
+
+    private func fetchTrendingMovieList(type: TrendingType, section: MovieSection) {
+        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchTrendingMovieList(type: type) }, section: section)
+    }
+
+    private func fetchTrendingTvs(type: TrendingType, section: MovieSection) {
+        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchTrendingTVs(type: type) }, section: section)
+    }
+
+    private func fetchPopularMovieList(section: MovieSection) {
+        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchPopularMovieList() }, section: section)
+    }
+
+    private func fetchUpcomingMovieList(section: MovieSection) {
+        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchUpcomingMovieList(page: 1) }, section: section)
+    }
+
+    private func fetchTopRatedMovieList(section: MovieSection) {
+        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchTopRatedMovieList() }, section: section)
+    }
+
+    func fetchYoutubeTrailer(for movie: Movie) {
+        guard let title = movie.originalTitle ?? movie.originalName else {
+            return
+        }
 
         Task {
             do {
-                defer {
-                    presenter.popLoading()
+                await MainActor.run {
+                    presenter.showLoading(maskType: .gradient)
                 }
 
-                let response = try await fetchFunction()
+                let response = try await NetworkManager.shared.fetchYoutubeTrailer(with: title)
 
                 await MainActor.run {
-                    presenter.didFetchMovieSuccess(response.movieList.filter { $0.imageURL != nil }, section: section)
+                    presenter.popLoading()
+
+                    guard let videoId = response.videoList.first?.id else {
+                        return
+                    }
+
+                    presenter.didFetchYoutubeTrailer(for: movie, videoId: videoId)
                 }
             } catch {
                 await MainActor.run {
+                    presenter.popLoading()
                     presenter.didFetchMovieFailure(error: error)
                 }
             }
         }
     }
 
-    func fetchTrendingMovieList(type: TrendingType, section: MovieSection) {
-        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchTrendingMovieList(type: type) }, section: section)
-    }
+    private func fetchMovieList(fetchFunction: @escaping () async throws -> FetchMoviesResponse, section: MovieSection) {
+        Task {
+            do {
+                await MainActor.run {
+                    presenter.showLoading()
+                }
 
-    func fetchTrendingTvs(type: TrendingType, section: MovieSection) {
-        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchTrendingTVs(type: type) }, section: section)
-    }
+                let response = try await fetchFunction()
 
-    func fetchPopularMovieList(section: MovieSection) {
-        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchPopularMovieList() }, section: section)
-    }
-
-    func fetchUpcomingMovieList(section: MovieSection) {
-        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchUpcomingMovieList(page: 1) }, section: section)
-    }
-
-    func fetchTopRatedMovieList(section: MovieSection) {
-        fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchTopRatedMovieList() }, section: section)
+                await MainActor.run {
+                    presenter.popLoading()
+                    presenter.didFetchMovieSuccess(response.movieList.filter { $0.imageURL != nil }, section: section)
+                }
+            } catch {
+                await MainActor.run {
+                    presenter.popLoading()
+                    presenter.didFetchMovieFailure(error: error)
+                }
+            }
+        }
     }
 }

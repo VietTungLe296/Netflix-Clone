@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PreviewViewController" customModule="Netflix_Clone" customModuleProvider="target">
+            <connections>
+                <outlet property="downloadButton" destination="gNq-co-P1M" id="jus-mR-8Wi"/>
+                <outlet property="overviewLabel" destination="EwD-ex-3qE" id="hGm-5D-7OW"/>
+                <outlet property="titleLabel" destination="h2S-CO-qkj" id="uD3-jp-gGg"/>
+                <outlet property="view" destination="iN0-l3-epB" id="32J-KN-4nf"/>
+                <outlet property="webView" destination="UUi-P9-nhv" id="VNg-F6-lpr"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UUi-P9-nhv">
+                    <rect key="frame" x="0.0" y="59" width="393" height="300"/>
+                    <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="300" id="ADM-5m-L97"/>
+                    </constraints>
+                    <wkWebViewConfiguration key="configuration">
+                        <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                        <wkPreferences key="preferences"/>
+                    </wkWebViewConfiguration>
+                </wkWebView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h2S-CO-qkj" userLabel="Title Label">
+                    <rect key="frame" x="20" y="379" width="353" height="26.333333333333314"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EwD-ex-3qE" userLabel="Overview Label">
+                    <rect key="frame" x="20" y="420.33333333333331" width="353" height="21.666666666666686"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gNq-co-P1M" customClass="ActionButtonView" customModule="Netflix_Clone" customModuleProvider="target">
+                    <rect key="frame" x="126.66666666666669" y="467" width="140" height="45"/>
+                    <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="kCB-iz-07t"/>
+                        <constraint firstAttribute="width" constant="140" id="ofN-Gb-BJY"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="title" value="Download"/>
+                        <userDefinedRuntimeAttribute type="color" keyPath="titleColor">
+                            <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="image" keyPath="image" value="arrow.down.circle.fill" catalog="system"/>
+                        <userDefinedRuntimeAttribute type="color" keyPath="imageTintColor">
+                            <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="f7i-21-BKF"/>
+            <color key="backgroundColor" systemColor="tertiarySystemFillColor"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="h2S-CO-qkj" secondAttribute="trailing" constant="20" id="58p-Cf-bUe"/>
+                <constraint firstItem="h2S-CO-qkj" firstAttribute="top" secondItem="UUi-P9-nhv" secondAttribute="bottom" constant="20" id="Jd5-e4-rkf"/>
+                <constraint firstAttribute="trailing" secondItem="EwD-ex-3qE" secondAttribute="trailing" constant="20" id="Jm8-UI-Kus"/>
+                <constraint firstItem="EwD-ex-3qE" firstAttribute="top" secondItem="h2S-CO-qkj" secondAttribute="bottom" constant="15" id="NhL-Nz-Hbe"/>
+                <constraint firstAttribute="trailing" secondItem="UUi-P9-nhv" secondAttribute="trailing" id="R3c-h6-9Xh"/>
+                <constraint firstItem="h2S-CO-qkj" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="d7z-sE-8rL"/>
+                <constraint firstItem="UUi-P9-nhv" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="iic-qA-lhd"/>
+                <constraint firstItem="gNq-co-P1M" firstAttribute="top" secondItem="EwD-ex-3qE" secondAttribute="bottom" constant="25" id="nYZ-aX-C0x"/>
+                <constraint firstItem="UUi-P9-nhv" firstAttribute="top" secondItem="f7i-21-BKF" secondAttribute="top" id="nz8-5H-PSO"/>
+                <constraint firstItem="gNq-co-P1M" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="sUg-g1-Jq8"/>
+                <constraint firstItem="EwD-ex-3qE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="woe-aX-agl"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-28" y="-11"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="arrow.down.circle.fill" catalog="system" width="128" height="123"/>
+        <systemColor name="tertiarySystemFillColor">
+            <color red="0.46274509803921571" green="0.46274509803921571" blue="0.50196078431372548" alpha="0.12" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
