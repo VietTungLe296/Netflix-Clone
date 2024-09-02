@@ -11,6 +11,8 @@ final class NetworkManager {
     private let baseURL = "https://api.themoviedb.org/3"
     static let shared = NetworkManager()
     
+    private init() {}
+    
     func fetchTrendingMovieList(type: TrendingType) async throws -> FetchMoviesResponse {
         do {
             let request = try createGetRequest(with: "/trending/movie/\(type.rawValue)")
@@ -145,7 +147,7 @@ final class NetworkManager {
         request.timeoutInterval = 10
         request.allHTTPHeaderFields = [
             "accept": "application/json",
-            "Authorization": "Bearer \(AppConfig.shared.apiToken ?? "")"
+            "Authorization": "Bearer \(AppConfig.shared.movieDBToken ?? "")"
         ]
         
         return request

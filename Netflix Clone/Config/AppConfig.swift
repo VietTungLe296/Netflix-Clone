@@ -9,15 +9,32 @@ import Foundation
 
 final class AppConfig {
     static let shared = AppConfig()
-
-    var apiToken: String? {
+    
+    private init() {}
+    
+    private var config: NSDictionary? {
         guard let path = Bundle.main.path(forResource: "Config", ofType: "plist"),
-              let config = NSDictionary(contentsOfFile: path),
-              let token = config["API_TOKEN"] as? String
+              let config = NSDictionary(contentsOfFile: path)
         else {
-            print("INVALID API TOKEN")
+            print("INVALID CONFIGURATION")
+            return nil
+        }
+        return config
+    }
+    
+    private func getToken(forKey key: String) -> String? {
+        guard let token = config?[key] as? String else {
+            print("INVALID TOKEN FOR KEY: \(key)")
             return nil
         }
         return token
+    }
+    
+    var movieDBToken: String? {
+        return getToken(forKey: "MOVIE_DB_API_TOKEN")
+    }
+    
+    var youtubeToken: String? {
+        return getToken(forKey: "GOOGLE_YOUTUBE_API_TOKEN")
     }
 }
