@@ -101,7 +101,7 @@ extension HomeViewController: HomeDisplayLogic {
     }
     
     func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId, isAutoplay: Bool) {
-        router?.goToPreviewScreen(of: movie, with: videoId, isAutoPlay: isAutoplay)
+        router?.goToPreviewScreen(of: movie, with: videoId, isAutoplay: isAutoplay)
     }
 }
 
