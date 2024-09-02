@@ -10,7 +10,7 @@ import UIKit
 protocol HomePresentationLogic: Presentable {
     func didFetchMovieSuccess(_ movieList: [Movie], section: MovieSection)
     func didFetchMovieFailure(error: Error)
-    func didFetchYoutubeTrailer(for movie: Movie, videoId: YoutubeVideoId)
+    func didFetchYoutubeTrailer(for movie: Movie, videoId: YoutubeVideoId, isAutoplay: Bool)
 }
 
 final class HomePresenter: HomePresentationLogic {
@@ -28,7 +28,7 @@ final class HomePresenter: HomePresentationLogic {
         print(error.localizedDescription)
     }
 
-    func didFetchYoutubeTrailer(for movie: Movie, videoId: YoutubeVideoId) {
-        viewController?.goToPreviewScreen(of: movie, with: videoId)
+    func didFetchYoutubeTrailer(for movie: Movie, videoId: YoutubeVideoId, isAutoplay: Bool) {
+        viewController?.goToPreviewScreen(of: movie, with: videoId, isAutoplay: isAutoplay)
     }
 }

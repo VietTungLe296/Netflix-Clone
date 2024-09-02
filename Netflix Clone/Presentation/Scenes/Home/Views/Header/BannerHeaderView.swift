@@ -8,7 +8,7 @@
 import UIKit
 
 protocol BannerHeaderViewDelegate: AnyObject {
-    func didTapMovie(_ movie: Movie)
+    func didTapMovie(_ movie: Movie, isAutoplay: Bool)
 }
 
 final class BannerHeaderView: UIView {
@@ -75,7 +75,7 @@ final class BannerHeaderView: UIView {
             return
         }
         
-        delegate?.didTapMovie(movieList[currentIndexPath.row])
+        delegate?.didTapMovie(movieList[currentIndexPath.row], isAutoplay: true)
     }
     
     @objc private func updatePageControlAndScroll() {
@@ -117,7 +117,7 @@ extension BannerHeaderView: UICollectionViewDataSource, UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         
-        delegate?.didTapMovie(movieList[indexPath.row])
+        delegate?.didTapMovie(movieList[indexPath.row], isAutoplay: false)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

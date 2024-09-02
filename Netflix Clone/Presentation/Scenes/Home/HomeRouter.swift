@@ -8,7 +8,7 @@
 import UIKit
 
 protocol HomeRoutingLogic: AnyObject {
-    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId)
+    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId, isAutoPlay: Bool)
 }
 
 final class HomeRouter: HomeRoutingLogic {
@@ -18,8 +18,8 @@ final class HomeRouter: HomeRoutingLogic {
         self.viewController = viewController
     }
 
-    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId) {
-        let destinationVC = PreviewBuilder.build(with: .init(movie: movie, videoId: videoId))
+    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId, isAutoPlay: Bool) {
+        let destinationVC = PreviewBuilder.build(with: .init(movie: movie, videoId: videoId, isAutoplay: isAutoPlay))
         viewController?.push(to: destinationVC)
     }
 }

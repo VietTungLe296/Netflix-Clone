@@ -8,7 +8,7 @@
 import UIKit
 
 protocol MovieCollectionTableCellDelegate: AnyObject {
-    func didTapMovie(_ movie: Movie)
+    func didTapMovie(_ movie: Movie, isAutoplay: Bool)
 }
 
 final class MovieCollectionTableViewCell: UITableViewCell {
@@ -56,6 +56,6 @@ extension MovieCollectionTableViewCell: UICollectionViewDataSource, UICollection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         
-        delegate?.didTapMovie(movieList[indexPath.row])
+        delegate?.didTapMovie(movieList[indexPath.row], isAutoplay: false)
     }
 }

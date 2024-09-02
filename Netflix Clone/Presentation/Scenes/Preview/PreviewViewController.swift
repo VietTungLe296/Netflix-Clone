@@ -18,6 +18,8 @@ final class PreviewViewController: UIViewController {
     @IBOutlet weak var overviewLabel: UILabel!
     @IBOutlet weak var downloadButton: ActionButtonView!
 
+    var isAutoplay = false
+
     // MARK: View lifecycle
 
     override func viewDidLoad() {
@@ -38,9 +40,21 @@ final class PreviewViewController: UIViewController {
     }
 
     private func setupWebView() {
-        guard let url = interactor?.getTrailerUrl() else { return }
-        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30)
-        webView.load(request)
+        if isAutoplay {
+            let embedHTML = """
+            <html>
+            <body style="margin: 0px; padding: 0px;">
+            <iframe width="100%" height="100%" src="https://youtube.com/embed/x0XDEhP4MQs?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </body>
+            </html>
+            """
+            
+            webView.loadHTMLString(embedHTML, baseURL: nil)
+        } else {
+            guard let url = interactor?.getTrailerUrl() else { return }
+            let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30)
+            webView.load(request)
+        }
     }
 
     private func setupLabels() {

@@ -11,6 +11,7 @@ final class PreviewBuilder {
     struct Dependencies {
         let movie: Movie
         let videoId: YoutubeVideoId
+        let isAutoplay: Bool
     }
     
     // MARK: The builder of PreviewViewController
@@ -23,7 +24,7 @@ final class PreviewBuilder {
         let interactor = PreviewInteractor(presenter: presenter, dependencies: dependencies)
 
         viewController.interactor = interactor
-        
+        viewController.isAutoplay = dependencies.isAutoplay
         return viewController
     }
 }

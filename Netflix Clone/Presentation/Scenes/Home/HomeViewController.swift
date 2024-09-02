@@ -9,7 +9,7 @@ import UIKit
 
 protocol HomeDisplayLogic: AnyObject {
     func displayFetchedMovieList(_ movieList: [Movie], forSection section: MovieSection)
-    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId)
+    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId, isAutoplay: Bool)
 }
 
 final class HomeViewController: UIViewController {
@@ -56,6 +56,8 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
+        title = "Home".localized
+        
         let logoButton = UIButton(type: .custom)
         logoButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         logoButton.setImage(UIImage(named: "netflix-logo"), for: .normal)
@@ -100,8 +102,8 @@ extension HomeViewController: HomeDisplayLogic {
         }
     }
     
-    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId) {
-        router?.goToPreviewScreen(of: movie, with: videoId)
+    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId, isAutoplay: Bool) {
+        router?.goToPreviewScreen(of: movie, with: videoId, isAutoPlay: isAutoplay)
     }
 }
 
@@ -156,7 +158,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension HomeViewController: MovieCollectionTableCellDelegate, BannerHeaderViewDelegate {
-    func didTapMovie(_ movie: Movie) {
-        interactor?.fetchYoutubeTrailer(for: movie)
+    func didTapMovie(_ movie: Movie, isAutoplay: Bool) {
+        interactor?.fetchYoutubeTrailer(for: movie, isAutoplay: isAutoplay)
     }
 }

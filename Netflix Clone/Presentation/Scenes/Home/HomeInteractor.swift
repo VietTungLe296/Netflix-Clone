@@ -9,7 +9,7 @@ import Foundation
 
 protocol HomeBusinessLogic: AnyObject {
     func fetchMovieData()
-    func fetchYoutubeTrailer(for movie: Movie)
+    func fetchYoutubeTrailer(for movie: Movie, isAutoplay: Bool)
 }
 
 final class HomeInteractor: HomeBusinessLogic {
@@ -61,7 +61,7 @@ final class HomeInteractor: HomeBusinessLogic {
         fetchMovieList(fetchFunction: { try await NetworkManager.shared.fetchTopRatedMovieList() }, section: section)
     }
 
-    func fetchYoutubeTrailer(for movie: Movie) {
+    func fetchYoutubeTrailer(for movie: Movie, isAutoplay: Bool) {
         guard let title = movie.originalTitle ?? movie.originalName else {
             return
         }
@@ -81,7 +81,7 @@ final class HomeInteractor: HomeBusinessLogic {
                         return
                     }
 
-                    presenter.didFetchYoutubeTrailer(for: movie, videoId: videoId)
+                    presenter.didFetchYoutubeTrailer(for: movie, videoId: videoId, isAutoplay: isAutoplay)
                 }
             } catch {
                 await MainActor.run {
