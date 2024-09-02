@@ -1,5 +1,5 @@
 //
-//  SearchResultViewController.swift
+//  DiscoverSearchResultViewController.swift
 //  Netflix Clone
 //
 //  Created by Le Viet Tung on 30/8/24.
@@ -7,21 +7,22 @@
 
 import UIKit
 
-protocol SearchResultUpdating: AnyObject {
-    func updateSearchResults(with keyword: String)
+protocol DiscoverSearchResultDelegate: AnyObject {
+    func didTapMovie(_ movie: Movie, isAutoplay: Bool)
 }
 
-protocol SearchResultDisplayLogic: AnyObject {
+protocol DiscoverSearchResultDisplayLogic: AnyObject {
     func displayFetchedMovieList(_ movieList: [Movie])
 }
 
-final class SearchResultViewController: UIViewController, SearchResultUpdating {
-    var interactor: SearchResultBusinessLogic?
-    var router: SearchResultRoutingLogic?
+final class DiscoverSearchResultViewController: UIViewController {
+    var interactor: DiscoverSearchResultBusinessLogic?
 
     @IBOutlet weak var includeAdultSwitch: UISwitch!
     @IBOutlet weak var includeAdultLabel: UILabel!
     @IBOutlet weak var searchCollectionView: UICollectionView!
+
+    weak var delegate: DiscoverSearchResultDelegate?
 
     private var movieList = [Movie]()
     private var displayMovieList = [Movie]()
@@ -49,6 +50,10 @@ final class SearchResultViewController: UIViewController, SearchResultUpdating {
         fetchDataOnLoad()
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     // MARK: Fetch SearchResult
 
     private func fetchDataOnLoad() {}
@@ -58,6 +63,7 @@ final class SearchResultViewController: UIViewController, SearchResultUpdating {
     private func setupView() {
         setupSwitchView()
         setupCollectionView()
+        setupObservers()
     }
 
     private func setupSwitchView() {
@@ -74,21 +80,28 @@ final class SearchResultViewController: UIViewController, SearchResultUpdating {
         isIncludeAdult.toggle()
     }
 
-    func updateSearchResults(with keyword: String) {
-        self.keyword = keyword
+    func setupObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateSearchKeyword(_:)), name: .updateDiscoverSearchKeyword, object: nil)
+    }
 
+    @objc private func updateSearchKeyword(_ notification: Notification) {
+        guard let keyword = notification.userInfo?["keyword"] as? String else {
+            return
+        }
+
+        self.keyword = keyword
         interactor?.searchMovies(with: keyword, includeAdult: true)
     }
 }
 
-extension SearchResultViewController: SearchResultDisplayLogic {
+extension DiscoverSearchResultViewController: DiscoverSearchResultDisplayLogic {
     func displayFetchedMovieList(_ movieList: [Movie]) {
         self.movieList = movieList
         isIncludeAdult = includeAdultSwitch.isOn
     }
 }
 
-extension SearchResultViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension DiscoverSearchResultViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return displayMovieList.count
     }
@@ -97,6 +110,12 @@ extension SearchResultViewController: UICollectionViewDataSource, UICollectionVi
         let cell = collectionView.dequeueCell(CarouselMovieCollectionViewCell.self, at: indexPath)
         cell.bind(with: displayMovieList[indexPath.row])
         return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+
+        delegate?.didTapMovie(movieList[indexPath.row], isAutoplay: false)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

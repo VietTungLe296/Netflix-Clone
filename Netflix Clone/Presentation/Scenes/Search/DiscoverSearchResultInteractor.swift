@@ -1,5 +1,5 @@
 //
-//  SearchResultInteractor.swift
+//  DiscoverSearchResultInteractor.swift
 //  Netflix Clone
 //
 //  Created by Le Viet Tung on 30/8/24.
@@ -7,14 +7,14 @@
 
 import Foundation
 
-protocol SearchResultBusinessLogic: AnyObject {
+protocol DiscoverSearchResultBusinessLogic: AnyObject {
     func searchMovies(with keyword: String, includeAdult: Bool)
 }
 
-final class SearchResultInteractor: SearchResultBusinessLogic {
-    private let presenter: SearchResultPresentationLogic
+final class DiscoverSearchResultInteractor: DiscoverSearchResultBusinessLogic {
+    private let presenter: DiscoverSearchResultPresentationLogic
 
-    init(presenter: SearchResultPresentationLogic) {
+    init(presenter: DiscoverSearchResultPresentationLogic) {
         self.presenter = presenter
     }
 

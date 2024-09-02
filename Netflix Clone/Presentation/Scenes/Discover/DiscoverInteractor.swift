@@ -9,6 +9,7 @@ import Foundation
 
 protocol DiscoverBusinessLogic: AnyObject {
     func fetchDiscoverMovies(page: Int, includeVideos: Bool, includeAdult: Bool, sortType: DiscoverSortType)
+    func fetchYoutubeTrailer(for movie: Movie, isAutoplay: Bool)
 }
 
 final class DiscoverInteractor: DiscoverBusinessLogic {
@@ -37,6 +38,37 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
                 }
             } catch {
                 await MainActor.run {
+                    presenter.didFetchMovieFailure(error: error)
+                }
+            }
+        }
+    }
+    
+    func fetchYoutubeTrailer(for movie: Movie, isAutoplay: Bool) {
+        guard let title = movie.originalTitle ?? movie.originalName else {
+            return
+        }
+
+        Task {
+            do {
+                await MainActor.run {
+                    presenter.showLoading(maskType: .gradient)
+                }
+
+                let response = try await NetworkManager.shared.fetchYoutubeTrailer(with: title)
+
+                await MainActor.run {
+                    presenter.popLoading()
+
+                    guard let videoId = response.videoList.first?.id else {
+                        return
+                    }
+
+                    presenter.didFetchYoutubeTrailer(for: movie, videoId: videoId, isAutoplay: isAutoplay)
+                }
+            } catch {
+                await MainActor.run {
+                    presenter.popLoading()
                     presenter.didFetchMovieFailure(error: error)
                 }
             }

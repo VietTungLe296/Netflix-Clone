@@ -9,6 +9,7 @@ import UIKit
 
 protocol DiscoverDisplayLogic: AnyObject {
     func displayFetchedMovieList(_ movieList: [Movie], totalPages: Int)
+    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId, isAutoplay: Bool)
 }
 
 final class DiscoverViewController: UIViewController {
@@ -18,13 +19,11 @@ final class DiscoverViewController: UIViewController {
     @IBOutlet weak var discoverTableView: UITableView!
     
     private let searchController: UISearchController = {
-        let controller = UISearchController(searchResultsController: SearchResultBuilder.build())
+        let controller = UISearchController(searchResultsController: DiscoverSearchResultBuilder.build())
         controller.searchBar.placeholder = "Type here to begin your search...".localized
         controller.searchBar.searchBarStyle = .minimal
         return controller
     }()
-    
-    weak var searchResultUpdater: SearchResultUpdating?
     
     private var debounceWorkItem: DispatchWorkItem?
     
@@ -67,8 +66,8 @@ final class DiscoverViewController: UIViewController {
         
         searchController.searchResultsUpdater = self
         
-        if let resultController = searchController.searchResultsController as? SearchResultUpdating {
-            searchResultUpdater = resultController
+        if let resultController = searchController.searchResultsController as? DiscoverSearchResultViewController {
+            resultController.delegate = self
         }
     }
     
@@ -99,6 +98,33 @@ extension DiscoverViewController: DiscoverDisplayLogic {
         }
     }
     
+    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId, isAutoplay: Bool) {
+        router?.goToPreviewScreen(of: movie, with: videoId, isAutoplay: isAutoplay)
+    }
+}
+
+extension DiscoverViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return movieList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueCell(MovieTitleTableViewCell.self, at: indexPath)
+        cell.bind(with: movieList[indexPath.row])
+        cell.delegate = self
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        interactor?.fetchYoutubeTrailer(for: movieList[indexPath.row], isAutoplay: false)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 140
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
@@ -111,39 +137,28 @@ extension DiscoverViewController: DiscoverDisplayLogic {
     }
 }
 
-extension DiscoverViewController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movieList.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueCell(MovieTitleTableViewCell.self, at: indexPath)
-        cell.bind(with: movieList[indexPath.row])
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 140
-    }
-}
-
 extension DiscoverViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         debounceWorkItem?.cancel()
 
-        let workItem = DispatchWorkItem { [weak self] in
-            guard let self = self else { return }
+        let workItem = DispatchWorkItem {
             guard let keyword = searchController.searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines),
                   keyword.count >= 3
             else {
                 return
             }
-             
-            self.searchResultUpdater?.updateSearchResults(with: keyword)
+            
+            NotificationCenter.default.post(name: .updateDiscoverSearchKeyword, object: nil, userInfo: ["keyword": keyword])
         }
 
         debounceWorkItem = workItem
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: workItem)
+    }
+}
+
+extension DiscoverViewController: MovieTitleTableViewCellDelegate, DiscoverSearchResultDelegate {
+    func didTapMovie(_ movie: Movie, isAutoplay: Bool) {
+        interactor?.fetchYoutubeTrailer(for: movie, isAutoplay: isAutoplay)
     }
 }

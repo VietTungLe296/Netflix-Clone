@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchResultViewController" customModule="Netflix_Clone" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DiscoverSearchResultViewController" customModule="Netflix_Clone" customModuleProvider="target">
             <connections>
                 <outlet property="includeAdultLabel" destination="FbX-Ru-Zzd" id="BLD-0X-319"/>
                 <outlet property="includeAdultSwitch" destination="ntZ-ZX-cRd" id="G8N-vU-RhV"/>
