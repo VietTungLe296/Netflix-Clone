@@ -36,7 +36,6 @@ final class BannerHeaderView: UIView {
         _ = fromNib()
         setupButtons()
         setupCollectionView()
-        setupTimer()
     }
     
     private func setupButtons() {
@@ -81,6 +80,7 @@ final class BannerHeaderView: UIView {
         self.movieList = movieList
         
         carouselPageControl.numberOfPages = movieList.count
+        setupTimer()
         
         DispatchQueue.main.async { [weak self] in
             self?.carouselCollectionView.reloadData()
