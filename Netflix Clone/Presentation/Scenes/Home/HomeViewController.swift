@@ -56,8 +56,6 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        title = "Home".localized
-        
         let logoButton = UIButton(type: .custom)
         logoButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         logoButton.setImage(UIImage(named: "netflix-logo"), for: .normal)

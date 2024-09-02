@@ -10,6 +10,7 @@ import UIKit
 protocol UpcomingPresentationLogic: Presentable {
     func didFetchMovieSuccess(_ movieList: [Movie], totalPages: Int)
     func didFetchMovieFailure(error: any Error)
+    func didFetchYoutubeTrailer(for movie: Movie, videoId: YoutubeVideoId, isAutoplay: Bool)
 }
 
 final class UpcomingPresenter: UpcomingPresentationLogic {
@@ -25,5 +26,9 @@ final class UpcomingPresenter: UpcomingPresentationLogic {
 
     func didFetchMovieFailure(error: any Error) {
         print(error.localizedDescription)
+    }
+    
+    func didFetchYoutubeTrailer(for movie: Movie, videoId: YoutubeVideoId, isAutoplay: Bool) {
+        viewController?.goToPreviewScreen(of: movie, with: videoId, isAutoplay: isAutoplay)
     }
 }

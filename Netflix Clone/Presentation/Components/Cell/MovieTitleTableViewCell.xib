@@ -43,6 +43,9 @@
                             <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="25"/>
                             <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </buttonConfiguration>
+                        <connections>
+                            <action selector="didTapPlay:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="3uo-pi-2zk"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>

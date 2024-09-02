@@ -7,19 +7,35 @@
 
 import UIKit
 
+protocol MovieTitleTableViewCellDelegate: AnyObject {
+    func didTapMovie(_ movie: Movie, isAutoplay: Bool)
+}
+
 final class MovieTitleTableViewCell: UITableViewCell {
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
+    
+    weak var delegate: MovieTitleTableViewCellDelegate?
+    
+    private var movie: Movie?
     
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     
-    func bind(with model: Movie) {
-        posterImageView.sd_setImage(with: model.imageURL,
+    func bind(with movie: Movie) {
+        self.movie = movie
+        
+        posterImageView.sd_setImage(with: movie.imageURL,
                                     placeholderImage: UIImage(named: "default"),
                                     context: nil)
         
-        titleLabel.text = model.originalTitle ?? model.originalName
+        titleLabel.text = movie.originalTitle ?? movie.originalName
+    }
+    
+    @IBAction func didTapPlay(_ sender: Any) {
+        guard let movie else { return }
+        
+        delegate?.didTapMovie(movie, isAutoplay: true)
     }
 }

@@ -9,6 +9,7 @@ import UIKit
 
 protocol UpcomingDisplayLogic: AnyObject {
     func displayFetchedMovieList(_ movieList: [Movie], totalPages: Int)
+    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId, isAutoplay: Bool)
 }
 
 final class UpcomingViewController: UIViewController {
@@ -48,6 +49,7 @@ final class UpcomingViewController: UIViewController {
         title = "Upcoming".localized
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.tintColor = .white
     }
     
     private func setupTableView() {
@@ -77,6 +79,33 @@ extension UpcomingViewController: UpcomingDisplayLogic {
         }
     }
     
+    func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId, isAutoplay: Bool) {
+        router?.goToPreviewScreen(of: movie, with: videoId, isAutoPlay: isAutoplay)
+    }
+}
+
+extension UpcomingViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return movieList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueCell(MovieTitleTableViewCell.self, at: indexPath)
+        cell.bind(with: movieList[indexPath.row])
+        cell.delegate = self
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 140
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        interactor?.fetchYoutubeTrailer(for: movieList[indexPath.row], isAutoplay: false)
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
@@ -89,18 +118,8 @@ extension UpcomingViewController: UpcomingDisplayLogic {
     }
 }
 
-extension UpcomingViewController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movieList.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueCell(MovieTitleTableViewCell.self, at: indexPath)
-        cell.bind(with: movieList[indexPath.row])
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 140
+extension UpcomingViewController: MovieTitleTableViewCellDelegate {
+    func didTapMovie(_ movie: Movie, isAutoplay: Bool) {
+        interactor?.fetchYoutubeTrailer(for: movie, isAutoplay: isAutoplay)
     }
 }
