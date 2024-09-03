@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol PreviewPresentationLogic: AnyObject {}
+protocol PreviewPresentationLogic: Presentable {}
 
 final class PreviewPresenter: PreviewPresentationLogic {
     private weak var viewController: PreviewDisplayLogic?

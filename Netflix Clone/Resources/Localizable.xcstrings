@@ -23,6 +23,17 @@
         }
       }
     },
+    "Downloaded" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã tải xuống"
+          }
+        }
+      }
+    },
     "Hide/Show adult content" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -45,6 +56,17 @@
         }
       }
     },
+    "movie" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "phim"
+          }
+        }
+      }
+    },
     "Play" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -63,6 +85,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Không thể bỏ qua"
+          }
+        }
+      }
+    },
+    "Saved %@ successfully" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tải xuống %@ thành công"
           }
         }
       }
@@ -107,17 +140,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nhập để tìm kiếm..."
-          }
-        }
-      }
-    },
-    "Upcoming" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sắp ra mắt"
           }
         }
       }

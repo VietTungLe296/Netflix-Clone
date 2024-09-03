@@ -30,7 +30,12 @@ final class PreviewViewController: UIViewController {
 
     // MARK: Fetch Preview
 
-    private func fetchDataOnLoad() {}
+    private func fetchDataOnLoad() {
+        interactor?.isMovieDownloaded { [weak self] isDownloaded in
+            self?.downloadButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self?.downloadMovie)))
+            self?.downloadButton.isHidden = isDownloaded
+        }
+    }
 
     // MARK: SetupUI
 
@@ -48,7 +53,7 @@ final class PreviewViewController: UIViewController {
             </body>
             </html>
             """
-            
+
             webView.loadHTMLString(embedHTML, baseURL: nil)
         } else {
             guard let url = interactor?.getTrailerUrl() else { return }
@@ -60,6 +65,10 @@ final class PreviewViewController: UIViewController {
     private func setupLabels() {
         titleLabel.text = interactor?.getMovieTitle()
         overviewLabel.text = interactor?.getMovieOverview()
+    }
+
+    @objc private func downloadMovie() {
+        interactor?.downloadMovie()
     }
 }
 

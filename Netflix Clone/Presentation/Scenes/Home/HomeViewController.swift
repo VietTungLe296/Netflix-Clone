@@ -39,6 +39,7 @@ final class HomeViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         (feedTableView.tableHeaderView as? BannerHeaderView)?.stopTimer()
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
    
     // MARK: Fetch Home
@@ -56,6 +57,8 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
+        title = "Home".localized
+        
         let logoButton = UIButton(type: .custom)
         logoButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         logoButton.setImage(UIImage(named: "netflix-logo"), for: .normal)
@@ -68,6 +71,7 @@ final class HomeViewController: UIViewController {
             UIBarButtonItem(image: UIImage(systemName: "person"), style: .done, target: self, action: nil),
             UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil),
         ]
+        navigationItem.titleView = UIView()
         
         navigationController?.navigationBar.tintColor = .white
     }
@@ -158,5 +162,9 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
 extension HomeViewController: MovieCollectionTableCellDelegate, BannerHeaderViewDelegate {
     func didTapMovie(_ movie: Movie, isAutoplay: Bool) {
         interactor?.fetchYoutubeTrailer(for: movie, isAutoplay: isAutoplay)
+    }
+    
+    func didDownloadMovie(_ movie: Movie) {
+        interactor?.downloadMovie(movie)
     }
 }

@@ -19,15 +19,15 @@ final class MainTabBarViewController: UITabBarController {
         homeNC.tabBarItem.image = UIImage(systemName: "house.fill")
         homeNC.title = "Home".localized
 
-        let upcomingNC = UINavigationController(rootViewController: UpcomingBuilder.build())
-        upcomingNC.tabBarItem.image =  UIImage(systemName: "calendar.circle.fill")
-        upcomingNC.title = "Upcoming".localized
-
         let discoverNC = UINavigationController(rootViewController: DiscoverBuilder.build())
         discoverNC.tabBarItem.image = UIImage(systemName: "safari.fill")
         discoverNC.title = "Discover".localized
         
-        viewControllers = [homeNC, upcomingNC, discoverNC]
+        let downloadedNC = UINavigationController(rootViewController: DownloadedBuilder.build())
+        downloadedNC.tabBarItem.image = UIImage(systemName: "arrow.down.square.fill")
+        downloadedNC.title = "Downloaded".localized
+        
+        viewControllers = [homeNC, discoverNC, downloadedNC]
     }
 
     private func setupTabBarAppearance() {

@@ -11,6 +11,8 @@ protocol PreviewBusinessLogic: AnyObject {
     func getMovieTitle() -> String?
     func getMovieOverview() -> String?
     func getTrailerUrl() -> URL?
+    func isMovieDownloaded(_ completion: @escaping (Bool) -> Void)
+    func downloadMovie()
 }
 
 final class PreviewInteractor: PreviewBusinessLogic {
@@ -33,5 +35,33 @@ final class PreviewInteractor: PreviewBusinessLogic {
     func getTrailerUrl() -> URL? {
         guard let videoId = dependencies.videoId.videoId else { return nil }
         return URL(string: "\(AppConstants.YOUTUBE_EMBED)\(videoId)")
+    }
+
+    func isMovieDownloaded(_ completion: @escaping (Bool) -> Void) {
+        DataPersistenceManager.shared.fetchDownloadedMovies { [weak self] result in
+            switch result {
+            case .success(let movieList):
+                completion(movieList.contains(where: { $0.id == self?.dependencies.movie.id }))
+            case .failure:
+                completion(false)
+            }
+        }
+    }
+
+    func downloadMovie() {
+        DataPersistenceManager.shared.downloadMovie(dependencies.movie) { [weak self] result in
+            guard let self else { return }
+
+            switch result {
+            case .success:
+                self.presenter.showAlert(message: String(format: "Saved %@ successfully".localized,
+                                                         dependencies.movie.originalTitle ?? dependencies.movie.originalName ?? "movie".localized))
+                {
+                    NotificationCenter.default.post(name: .updateDownloadedMovieTab, object: nil, userInfo: nil)
+                }
+            case .failure(let failure):
+                self.presenter.showAlert(message: failure.localizedDescription)
+            }
+        }
     }
 }

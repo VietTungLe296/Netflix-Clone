@@ -8,16 +8,29 @@
 import Foundation
 
 struct Movie: Codable {
-    let id: Int
+    let id: Int64
     let mediaType: String?
     let originalName: String?
     let originalTitle: String?
     let posterPath: String?
     let overview: String?
-    let voteCount: Int?
+    let voteCount: Int64?
     let voteAverage: Double?
     let releaseDate: String?
     let adult: Bool?
+
+    init(from model: MovieCoreDataModel) {
+        self.id = model.id
+        self.mediaType = model.mediaType
+        self.originalName = model.originalName
+        self.originalTitle = model.originalTitle
+        self.posterPath = model.posterPath
+        self.overview = model.overview
+        self.voteCount = model.voteCount
+        self.voteAverage = model.voteAverage
+        self.releaseDate = model.releaseDate
+        self.adult = model.adult
+    }
 
     enum CodingKeys: String, CodingKey {
         case id

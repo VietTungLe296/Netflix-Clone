@@ -13,7 +13,7 @@ final class PreviewBuilder {
         let videoId: YoutubeVideoId
         let isAutoplay: Bool
     }
-    
+
     // MARK: The builder of PreviewViewController
 
     class func build(with dependencies: Dependencies) -> PreviewViewController {

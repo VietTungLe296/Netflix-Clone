@@ -19,21 +19,21 @@ final class DiscoverSearchResultInteractor: DiscoverSearchResultBusinessLogic {
     }
 
     func searchMovies(with keyword: String, includeAdult: Bool) {
-        presenter.showLoading()
-
         Task {
             do {
-                defer {
-                    presenter.hideLoading()
+                await MainActor.run {
+                    presenter.showLoading()
                 }
 
                 let response = try await NetworkManager.shared.searchMovies(with: keyword, includeAdult: includeAdult)
 
                 await MainActor.run {
+                    presenter.hideLoading()
                     presenter.didFetchMovieSuccess(response.movieList.filter { $0.imageURL != nil })
                 }
             } catch {
                 await MainActor.run {
+                    presenter.hideLoading()
                     presenter.didFetchMovieFailure(error: error)
                 }
             }

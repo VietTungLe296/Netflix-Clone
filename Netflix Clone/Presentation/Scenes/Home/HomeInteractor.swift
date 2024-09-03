@@ -10,6 +10,7 @@ import Foundation
 protocol HomeBusinessLogic: AnyObject {
     func fetchMovieData()
     func fetchYoutubeTrailer(for movie: Movie, isAutoplay: Bool)
+    func downloadMovie(_ movie: Movie)
 }
 
 final class HomeInteractor: HomeBusinessLogic {
@@ -37,6 +38,21 @@ final class HomeInteractor: HomeBusinessLogic {
                 group.addTask {
                     self.fetchTopRatedMovieList(section: .topRated)
                 }
+            }
+        }
+    }
+
+    func downloadMovie(_ movie: Movie) {
+        DataPersistenceManager.shared.downloadMovie(movie) { [weak self] result in
+            switch result {
+            case .success:
+                self?.presenter.showAlert(message: String(format: "Saved %@ successfully".localized,
+                                                          movie.originalTitle ?? movie.originalName ?? "movie".localized))
+                {
+                    NotificationCenter.default.post(name: .updateDownloadedMovieTab, object: nil, userInfo: nil)
+                }
+            case .failure(let failure):
+                self?.presenter.showAlert(message: failure.localizedDescription)
             }
         }
     }

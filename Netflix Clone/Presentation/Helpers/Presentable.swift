@@ -12,6 +12,7 @@ protocol Presentable: AnyObject {
     func showLoading(maskType: SVProgressHUDMaskType)
     func hideLoading()
     func popLoading()
+    func showAlert(message: String, _ completion: (() -> Void)?)
 }
 
 extension Presentable {
@@ -25,5 +26,9 @@ extension Presentable {
     
     func popLoading() {
         CommonViewPresenter.shared.popLoadingView()
+    }
+    
+    func showAlert(message: String, _ completion: (() -> Void)? = nil) {
+        CommonViewPresenter.shared.showAlert(message: message, completion)
     }
 }

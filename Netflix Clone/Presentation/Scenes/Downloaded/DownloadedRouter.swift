@@ -1,20 +1,20 @@
 //
-//  UpcomingRouter.swift
+//  DownloadedRouter.swift
 //  Netflix Clone
 //
-//  Created by Le Viet Tung on 28/8/24.
+//  Created by Le Viet Tung on 3/9/24.
 //
 
 import UIKit
 
-protocol UpcomingRoutingLogic: AnyObject {
+protocol DownloadedRoutingLogic: AnyObject {
     func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId, isAutoplay: Bool)
 }
 
-final class UpcomingRouter: UpcomingRoutingLogic {
-    private weak var viewController: UpcomingViewController?
+final class DownloadedRouter: DownloadedRoutingLogic {
+    private weak var viewController: DownloadedViewController?
 
-    init(viewController: UpcomingViewController?) {
+    init(viewController: DownloadedViewController?) {
         self.viewController = viewController
     }
 

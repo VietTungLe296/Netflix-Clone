@@ -9,4 +9,5 @@ import Foundation
 
 extension Notification.Name {
     static let updateDiscoverSearchKeyword = Notification.Name("updateDiscoverSearchKeyword")
+    static let updateDownloadedMovieTab = Notification.Name("updateDownloadedMovieTab")
 }

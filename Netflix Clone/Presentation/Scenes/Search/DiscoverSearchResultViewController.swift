@@ -9,6 +9,7 @@ import UIKit
 
 protocol DiscoverSearchResultDelegate: AnyObject {
     func didTapMovie(_ movie: Movie, isAutoplay: Bool)
+    func didDownloadMovie(_ movie: Movie)
 }
 
 protocol DiscoverSearchResultDisplayLogic: AnyObject {
@@ -116,6 +117,22 @@ extension DiscoverSearchResultViewController: UICollectionViewDataSource, UIColl
         collectionView.deselectItem(at: indexPath, animated: true)
 
         delegate?.didTapMovie(movieList[indexPath.row], isAutoplay: false)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let movie = movieList[indexPath.row]
+
+        let config = UIContextMenuConfiguration(actionProvider: { _ in
+            let downloadAction = UIAction(title: "Download".localized,
+                                          image: UIImage(systemName: "arrow.down.circle.fill"))
+            { [weak self] _ in
+                self?.delegate?.didDownloadMovie(movie)
+            }
+
+            return UIMenu(options: [.displayInline], children: [downloadAction])
+        })
+
+        return config
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

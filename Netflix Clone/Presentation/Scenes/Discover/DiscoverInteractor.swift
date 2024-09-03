@@ -10,6 +10,7 @@ import Foundation
 protocol DiscoverBusinessLogic: AnyObject {
     func fetchDiscoverMovies(page: Int, includeVideos: Bool, includeAdult: Bool, sortType: DiscoverSortType)
     func fetchYoutubeTrailer(for movie: Movie, isAutoplay: Bool)
+    func downloadMovie(_ movie: Movie)
 }
 
 final class DiscoverInteractor: DiscoverBusinessLogic {
@@ -24,8 +25,8 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
 
         Task {
             do {
-                defer {
-                    presenter.hideLoading()
+                await MainActor.run {
+                    presenter.showLoading()
                 }
 
                 let response = try await NetworkManager.shared.fetchDiscoverMovies(page: page,
@@ -34,16 +35,18 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
                                                                                    sortType: sortType)
 
                 await MainActor.run {
+                    presenter.hideLoading()
                     presenter.didFetchMovieSuccess(response.movieList, totalPages: response.totalPages)
                 }
             } catch {
                 await MainActor.run {
-                    presenter.didFetchMovieFailure(error: error)
+                    presenter.hideLoading()
+                    presenter.showAlert(message: error.localizedDescription)
                 }
             }
         }
     }
-    
+
     func fetchYoutubeTrailer(for movie: Movie, isAutoplay: Bool) {
         guard let title = movie.originalTitle ?? movie.originalName else {
             return
@@ -58,7 +61,7 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
                 let response = try await NetworkManager.shared.fetchYoutubeTrailer(with: title)
 
                 await MainActor.run {
-                    presenter.popLoading()
+                    presenter.hideLoading()
 
                     guard let videoId = response.videoList.first?.id else {
                         return
@@ -68,9 +71,22 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
                 }
             } catch {
                 await MainActor.run {
-                    presenter.popLoading()
-                    presenter.didFetchMovieFailure(error: error)
+                    presenter.hideLoading()
+                    presenter.showAlert(message: error.localizedDescription)
                 }
+            }
+        }
+    }
+
+    func downloadMovie(_ movie: Movie) {
+        DataPersistenceManager.shared.downloadMovie(movie) { [weak self] result in
+            switch result {
+            case .success:
+                self?.presenter.showAlert(message: String(format: "Saved %@ successfully".localized, movie.originalTitle ?? movie.originalName ?? "movie".localized)) {
+                    NotificationCenter.default.post(name: .updateDownloadedMovieTab, object: nil, userInfo: nil)
+                }
+            case .failure(let failure):
+                self?.presenter.showAlert(message: failure.localizedDescription)
             }
         }
     }

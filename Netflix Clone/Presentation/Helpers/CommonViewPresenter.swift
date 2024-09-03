@@ -27,4 +27,9 @@ final class CommonViewPresenter {
     func popLoadingView() {
         SVProgressHUD.popActivity()
     }
+    
+    func showAlert(message: String, _ completion: (() -> Void)? = nil)  {
+        print(message)
+        completion?()
+    }
 }

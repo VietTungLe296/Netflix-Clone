@@ -9,7 +9,6 @@ import UIKit
 
 protocol DiscoverPresentationLogic: Presentable {
     func didFetchMovieSuccess(_ movieList: [Movie], totalPages: Int)
-    func didFetchMovieFailure(error: any Error)
     func didFetchYoutubeTrailer(for movie: Movie, videoId: YoutubeVideoId, isAutoplay: Bool)
 }
 
@@ -22,10 +21,6 @@ final class DiscoverPresenter: DiscoverPresentationLogic {
 
     func didFetchMovieSuccess(_ movieList: [Movie], totalPages: Int) {
         viewController?.displayFetchedMovieList(movieList, totalPages: totalPages)
-    }
-
-    func didFetchMovieFailure(error: any Error) {
-        print(error.localizedDescription)
     }
 
     func didFetchYoutubeTrailer(for movie: Movie, videoId: YoutubeVideoId, isAutoplay: Bool) {

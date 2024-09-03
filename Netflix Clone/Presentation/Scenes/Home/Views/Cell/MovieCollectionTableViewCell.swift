@@ -9,6 +9,7 @@ import UIKit
 
 protocol MovieCollectionTableCellDelegate: AnyObject {
     func didTapMovie(_ movie: Movie, isAutoplay: Bool)
+    func didDownloadMovie(_ movie: Movie)
 }
 
 final class MovieCollectionTableViewCell: UITableViewCell {
@@ -23,7 +24,7 @@ final class MovieCollectionTableViewCell: UITableViewCell {
         setupCollectionView()
     }
     
-    func setupCollectionView() {
+    private func setupCollectionView() {
         movieCollectionView.dataSource = self
         movieCollectionView.delegate = self
         movieCollectionView.registerCell(CarouselMovieCollectionViewCell.self)
@@ -57,5 +58,21 @@ extension MovieCollectionTableViewCell: UICollectionViewDataSource, UICollection
         collectionView.deselectItem(at: indexPath, animated: true)
         
         delegate?.didTapMovie(movieList[indexPath.row], isAutoplay: false)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let movie = movieList[indexPath.row]
+        
+        let config = UIContextMenuConfiguration(actionProvider:  { _ in
+            let downloadAction = UIAction(title: "Download".localized,
+                                          image: UIImage(systemName: "arrow.down.circle.fill"))
+            { [weak self] _ in
+                self?.delegate?.didDownloadMovie(movie)
+            }
+            
+            return UIMenu(options: [.displayInline], children: [downloadAction])
+        })
+        
+        return config
     }
 }

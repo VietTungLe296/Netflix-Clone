@@ -125,6 +125,22 @@ extension DiscoverViewController: UITableViewDataSource, UITableViewDelegate {
         return 140
     }
     
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let movie = movieList[indexPath.row]
+        
+        let config = UIContextMenuConfiguration(actionProvider: { _ in
+            let downloadAction = UIAction(title: "Download".localized,
+                                          image: UIImage(systemName: "arrow.down.circle.fill"))
+            { [weak self] _ in
+                self?.interactor?.downloadMovie(movie)
+            }
+            
+            return UIMenu(options: [.displayInline], children: [downloadAction])
+        })
+        
+        return config
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
@@ -160,5 +176,9 @@ extension DiscoverViewController: UISearchResultsUpdating {
 extension DiscoverViewController: MovieTitleTableViewCellDelegate, DiscoverSearchResultDelegate {
     func didTapMovie(_ movie: Movie, isAutoplay: Bool) {
         interactor?.fetchYoutubeTrailer(for: movie, isAutoplay: isAutoplay)
+    }
+    
+    func didDownloadMovie(_ movie: Movie) {
+        interactor?.downloadMovie(movie)
     }
 }
