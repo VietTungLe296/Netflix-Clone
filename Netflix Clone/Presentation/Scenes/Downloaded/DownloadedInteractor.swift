@@ -11,10 +11,13 @@ protocol DownloadedBusinessLogic: AnyObject {
     func fetchDownloadedMovie()
     func fetchYoutubeTrailer(for movie: Movie, isAutoplay: Bool)
     func deleteMovie(_ movie: Movie, _ completion: @escaping () -> Void)
+    func updateSortType(_ sortType: SortType)
 }
 
 final class DownloadedInteractor: DownloadedBusinessLogic {
     private let presenter: DownloadedPresentationLogic
+
+    private var sortType: SortType = .nameAscending
 
     init(presenter: DownloadedPresentationLogic) {
         self.presenter = presenter
@@ -22,27 +25,30 @@ final class DownloadedInteractor: DownloadedBusinessLogic {
 
     func fetchDownloadedMovie() {
         DataPersistenceManager.shared.fetchDownloadedMovies { [weak self] result in
+            guard let self else { return }
+
             switch result {
             case .success(let movieList):
-                self?.presenter.didFetchMovieSuccess(movieList)
+                switch sortType {
+                case .nameAscending:
+                    self.presenter.didFetchMovieSuccess(movieList.sorted(by: { $0.displayTitle < $1.displayTitle }))
+                case .nameDescending:
+                    self.presenter.didFetchMovieSuccess(movieList.sorted(by: { $0.displayTitle > $1.displayTitle }))
+                }
             case .failure(let failure):
-                self?.presenter.showAlert(message: failure.localizedDescription)
+                self.presenter.showAlert(message: failure.localizedDescription)
             }
         }
     }
 
     func fetchYoutubeTrailer(for movie: Movie, isAutoplay: Bool) {
-        guard let title = movie.originalTitle ?? movie.originalName else {
-            return
-        }
-
         Task {
             do {
                 await MainActor.run {
                     presenter.showLoading(maskType: .gradient)
                 }
 
-                let response = try await NetworkManager.shared.fetchYoutubeTrailer(with: title)
+                let response = try await NetworkManager.shared.fetchYoutubeTrailer(with: movie.displayTitle)
 
                 await MainActor.run {
                     presenter.popLoading()
@@ -71,5 +77,9 @@ final class DownloadedInteractor: DownloadedBusinessLogic {
                 self?.presenter.showAlert(message: failure.localizedDescription)
             }
         }
+    }
+    
+    func updateSortType(_ sortType: SortType) {
+        self.sortType = sortType
     }
 }

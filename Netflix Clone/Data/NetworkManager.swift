@@ -155,8 +155,8 @@ final class NetworkManager {
 
 extension NetworkManager {
     func fetchYoutubeTrailer(with keyword: String) async throws -> FetchYoutubeVideosResponse {
-        #warning("Remove this sample response")
-        return FetchYoutubeVideosResponse(videoList: [.init(id: .init(kind: "", videoId: "OzY2r2JXsDM"))])
+//        #warning("Remove this sample response")
+//        return FetchYoutubeVideosResponse(videoList: [.init(id: .init(kind: "", videoId: "OzY2r2JXsDM"))])
         
         do {
             guard let url = URL(string: AppConstants.youtubeBaseURL) else {

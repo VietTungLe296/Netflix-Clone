@@ -30,7 +30,7 @@ final class MovieTitleTableViewCell: UITableViewCell {
                                     placeholderImage: UIImage(named: "default"),
                                     context: nil)
         
-        titleLabel.text = movie.originalTitle ?? movie.originalName
+        titleLabel.text = movie.displayTitle
     }
     
     @IBAction func didTapPlay(_ sender: Any) {

@@ -16,3 +16,8 @@ enum DiscoverSortType: String {
     case popularityAsc = "popularity_asc"
     case popularityDesc = "popularity_desc"
 }
+
+enum SortType {
+    case nameAscending
+    case nameDescending
+}

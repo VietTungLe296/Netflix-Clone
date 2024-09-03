@@ -46,10 +46,12 @@ final class PreviewViewController: UIViewController {
 
     private func setupWebView() {
         if isAutoplay {
+            guard let videoId = interactor?.getVideoId() else { return }
+            
             let embedHTML = """
             <html>
             <body style="margin: 0px; padding: 0px;">
-            <iframe width="100%" height="100%" src="https://youtube.com/embed/x0XDEhP4MQs?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            <iframe width="100%" height="100%" src="https://youtube.com/embed/\(videoId)?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </body>
             </html>
             """

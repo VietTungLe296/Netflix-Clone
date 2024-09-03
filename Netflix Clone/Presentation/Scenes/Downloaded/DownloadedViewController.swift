@@ -43,12 +43,13 @@ final class DownloadedViewController: UIViewController {
     private func setupView() {
         setupNavigationBar()
         setupTableView()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(fetchDataOnLoad), name: .updateDownloadedMovieTab, object: nil)
     }
     
     private func setupNavigationBar() {
         title = "Downloaded".localized
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationItem.largeTitleDisplayMode = .never
         navigationController?.navigationBar.tintColor = .white
     }
     
@@ -57,7 +58,9 @@ final class DownloadedViewController: UIViewController {
         downloadedTableView.delegate = self
         downloadedTableView.registerCell(MovieTitleTableViewCell.self)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(fetchDataOnLoad), name: .updateDownloadedMovieTab, object: nil)
+        let headerView = DownloadedTableHeaderView(frame: .init(x: 0, y: 0, width: downloadedTableView.bounds.width, height: 25))
+        headerView.delegate = self
+        downloadedTableView.tableHeaderView = headerView
     }
 }
 
@@ -112,8 +115,23 @@ extension DownloadedViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-extension DownloadedViewController: MovieTitleTableViewCellDelegate {
+extension DownloadedViewController: MovieTitleTableViewCellDelegate, DownloadedTableHeaderViewDelegate {
     func didTapMovie(_ movie: Movie, isAutoplay: Bool) {
         interactor?.fetchYoutubeTrailer(for: movie, isAutoplay: isAutoplay)
+    }
+    
+    func didChangeSortType(_ sortType: SortType) {
+        interactor?.updateSortType(sortType)
+        
+        switch sortType {
+        case .nameAscending:
+            movieList.sort(by: { $0.displayTitle < $1.displayTitle })
+        case .nameDescending:
+            movieList.sort(by: { $0.displayTitle > $1.displayTitle })
+        }
+       
+        DispatchQueue.main.async { [weak self] in
+            self?.downloadedTableView.reloadData()
+        }
     }
 }

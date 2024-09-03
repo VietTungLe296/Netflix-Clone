@@ -19,6 +19,16 @@ struct Movie: Codable {
     let releaseDate: String?
     let adult: Bool?
 
+    var displayTitle: String {
+        if let originalTitle {
+            return originalTitle
+        } else if let originalName {
+            return originalName
+        } else {
+            return "N/A"
+        }
+    }
+
     init(from model: MovieCoreDataModel) {
         self.id = model.id
         self.mediaType = model.mediaType

@@ -48,17 +48,13 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
     }
 
     func fetchYoutubeTrailer(for movie: Movie, isAutoplay: Bool) {
-        guard let title = movie.originalTitle ?? movie.originalName else {
-            return
-        }
-
         Task {
             do {
                 await MainActor.run {
                     presenter.showLoading(maskType: .gradient)
                 }
 
-                let response = try await NetworkManager.shared.fetchYoutubeTrailer(with: title)
+                let response = try await NetworkManager.shared.fetchYoutubeTrailer(with: movie.displayTitle)
 
                 await MainActor.run {
                     presenter.hideLoading()
@@ -82,7 +78,7 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
         DataPersistenceManager.shared.downloadMovie(movie) { [weak self] result in
             switch result {
             case .success:
-                self?.presenter.showAlert(message: String(format: "Saved %@ successfully".localized, movie.originalTitle ?? movie.originalName ?? "movie".localized)) {
+                self?.presenter.showAlert(message: String(format: "Saved %@ successfully".localized, movie.displayTitle)) {
                     NotificationCenter.default.post(name: .updateDownloadedMovieTab, object: nil, userInfo: nil)
                 }
             case .failure(let failure):
