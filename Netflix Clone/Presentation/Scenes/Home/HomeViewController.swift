@@ -14,7 +14,6 @@ protocol HomeDisplayLogic: AnyObject {
 
 final class HomeViewController: UIViewController {
     var interactor: HomeBusinessLogic?
-    var router: HomeRoutingLogic?
     
     // MARK: IBOutlet
     
@@ -105,7 +104,8 @@ extension HomeViewController: HomeDisplayLogic {
     }
     
     func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId, isAutoplay: Bool) {
-        router?.goToPreviewScreen(of: movie, with: videoId, isAutoplay: isAutoplay)
+        let destinationVC = PreviewBuilder.build(with: .init(movie: movie, videoId: videoId, isAutoplay: isAutoplay))
+        push(to: destinationVC)
     }
 }
 

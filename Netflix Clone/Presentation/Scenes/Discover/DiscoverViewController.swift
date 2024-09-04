@@ -14,7 +14,6 @@ protocol DiscoverDisplayLogic: AnyObject {
 
 final class DiscoverViewController: UIViewController {
     var interactor: DiscoverBusinessLogic?
-    var router: DiscoverRoutingLogic?
     
     @IBOutlet weak var discoverTableView: UITableView!
     
@@ -99,7 +98,8 @@ extension DiscoverViewController: DiscoverDisplayLogic {
     }
     
     func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId, isAutoplay: Bool) {
-        router?.goToPreviewScreen(of: movie, with: videoId, isAutoplay: isAutoplay)
+        let destinationVC = PreviewBuilder.build(with: .init(movie: movie, videoId: videoId, isAutoplay: isAutoplay))
+        push(to: destinationVC)
     }
 }
 

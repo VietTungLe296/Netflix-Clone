@@ -14,7 +14,6 @@ protocol DownloadedDisplayLogic: AnyObject {
 
 final class DownloadedViewController: UIViewController {
     var interactor: DownloadedBusinessLogic?
-    var router: DownloadedRoutingLogic?
 
     @IBOutlet weak var downloadedTableView: UITableView!
     
@@ -74,7 +73,8 @@ extension DownloadedViewController: DownloadedDisplayLogic {
     }
     
     func goToPreviewScreen(of movie: Movie, with videoId: YoutubeVideoId, isAutoplay: Bool) {
-        router?.goToPreviewScreen(of: movie, with: videoId, isAutoplay: isAutoplay)
+        let destinationVC = PreviewBuilder.build(with: .init(movie: movie, videoId: videoId, isAutoplay: isAutoplay))
+        push(to: destinationVC)
     }
 }
 

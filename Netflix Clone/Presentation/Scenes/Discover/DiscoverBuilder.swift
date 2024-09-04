@@ -15,11 +15,9 @@ final class DiscoverBuilder {
 
         let viewController = DiscoverViewController()
         let presenter = DiscoverPresenter(viewController: viewController)
-        let router = DiscoverRouter(viewController: viewController)
         let interactor = DiscoverInteractor(presenter: presenter)
 
         viewController.interactor = interactor
-        viewController.router = router
 
         return viewController
     }

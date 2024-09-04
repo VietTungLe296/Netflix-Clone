@@ -34,7 +34,7 @@ final class DiscoverSearchResultInteractor: DiscoverSearchResultBusinessLogic {
             } catch {
                 await MainActor.run {
                     presenter.hideLoading()
-                    presenter.didFetchMovieFailure(error: error)
+                    presenter.showAlert(message: error.localizedDescription)
                 }
             }
         }

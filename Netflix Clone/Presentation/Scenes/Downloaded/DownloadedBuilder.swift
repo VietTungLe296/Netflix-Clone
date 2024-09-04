@@ -15,11 +15,9 @@ final class DownloadedBuilder {
 
         let viewController = DownloadedViewController()
         let presenter = DownloadedPresenter(viewController: viewController)
-        let router = DownloadedRouter(viewController: viewController)
         let interactor = DownloadedInteractor(presenter: presenter)
 
         viewController.interactor = interactor
-        viewController.router = router
 
         return viewController
     }

@@ -9,7 +9,6 @@ import UIKit
 
 protocol DiscoverSearchResultPresentationLogic: Presentable {
     func didFetchMovieSuccess(_ movieList: [Movie])
-    func didFetchMovieFailure(error: any Error)
 }
 
 final class DiscoverSearchResultPresenter: DiscoverSearchResultPresentationLogic {
@@ -21,9 +20,5 @@ final class DiscoverSearchResultPresenter: DiscoverSearchResultPresentationLogic
 
     func didFetchMovieSuccess(_ movieList: [Movie]) {
         viewController?.displayFetchedMovieList(movieList)
-    }
-
-    func didFetchMovieFailure(error: any Error) {
-        print(error.localizedDescription)
     }
 }
