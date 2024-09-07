@@ -8,13 +8,20 @@
 import UIKit
 
 extension UIViewController {
-    func push(to destination: UIViewController) {
+    func push(to destination: UIViewController,
+              duration: CFTimeInterval = 0.5,
+              transitionType: CATransitionType = .push,
+              subtype: CATransitionSubtype = .fromRight)
+    {
+        guard let navigationController = navigationController else { return }
+
         let transition = CATransition()
-        transition.duration = 0.5
-        transition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
-        transition.type = CATransitionType.push
-        transition.subtype = CATransitionSubtype.fromRight
-        self.navigationController?.view.layer.add(transition, forKey: nil)
-        self.navigationController?.pushViewController(destination, animated: false)
+        transition.duration = duration
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        transition.type = transitionType
+        transition.subtype = subtype
+
+        navigationController.view.layer.add(transition, forKey: nil)
+        navigationController.pushViewController(destination, animated: false)
     }
 }

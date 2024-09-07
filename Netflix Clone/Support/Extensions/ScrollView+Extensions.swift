@@ -9,61 +9,58 @@ import UIKit
 
 extension UICollectionView {
     func dequeueCell<T: UICollectionViewCell>(_ anyClass: T.Type, at indexPath: IndexPath) -> T {
-        let cell = dequeueReusableCell(withReuseIdentifier: String(describing: anyClass), for: indexPath) as? T
-        return cell ?? T()
+        guard let cell = dequeueReusableCell(withReuseIdentifier: String(describing: anyClass), for: indexPath) as? T else {
+            fatalError("Unable to dequeue \(T.self) with identifier: \(String(describing: anyClass))")
+        }
+        return cell
     }
-    
-    func registerCell<T: UICollectionViewCell>(_ anyClass: T.Type, nibType: Bool = true) {
-        return nibType
-            ? register(UINib(nibName: String(describing: anyClass), bundle: nil),
-                       forCellWithReuseIdentifier: String(describing: anyClass))
-            : register(anyClass, forCellWithReuseIdentifier: String(describing: anyClass))
+
+    func registerCell<T: UICollectionViewCell>(_ anyClass: T.Type, usingNib: Bool = true) {
+        let identifier = String(describing: anyClass)
+        usingNib
+            ? register(UINib(nibName: identifier, bundle: nil), forCellWithReuseIdentifier: identifier)
+            : register(anyClass, forCellWithReuseIdentifier: identifier)
     }
-    
-    func registerHeaderFooter<T: UICollectionReusableView>(_ anyClass: T.Type, kind: String, nibType: Bool = true) {
-        return nibType
-            ? register(UINib(nibName: String(describing: anyClass), bundle: nil),
-                       forSupplementaryViewOfKind: kind,
-                       withReuseIdentifier: String(describing: anyClass))
-            : register(anyClass,
-                       forSupplementaryViewOfKind: kind,
-                       withReuseIdentifier: String(describing: anyClass))
+
+    func registerHeaderFooter<T: UICollectionReusableView>(_ anyClass: T.Type, kind: String, usingNib: Bool = true) {
+        let identifier = String(describing: anyClass)
+        usingNib
+            ? register(UINib(nibName: identifier, bundle: nil), forSupplementaryViewOfKind: kind, withReuseIdentifier: identifier)
+            : register(anyClass, forSupplementaryViewOfKind: kind, withReuseIdentifier: identifier)
     }
 
     func currentCenteredItemIndex() -> IndexPath? {
-        let visibleRect = CGRect(origin: self.contentOffset, size: self.bounds.size)
-        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
-            
-        if let indexPath = indexPathForItem(at: visiblePoint) {
-            return indexPath
-        }
-            
-        return nil
+        let visiblePoint = CGPoint(x: bounds.midX + contentOffset.x, y: bounds.midY + contentOffset.y)
+        return indexPathForItem(at: visiblePoint)
     }
 }
 
 extension UITableView {
     func dequeueCell<T: UITableViewCell>(_ anyClass: T.Type, at indexPath: IndexPath) -> T {
-        let cell = dequeueReusableCell(withIdentifier: String(describing: anyClass), for: indexPath) as? T
-        return cell ?? T()
+        guard let cell = dequeueReusableCell(withIdentifier: String(describing: anyClass), for: indexPath) as? T else {
+            fatalError("Unable to dequeue \(T.self) with identifier: \(String(describing: anyClass))")
+        }
+        return cell
     }
-    
+
     func dequeueHeaderFooter<T: UITableViewHeaderFooterView>(_ anyClass: T.Type) -> T {
-        let view = dequeueReusableHeaderFooterView(withIdentifier: String(describing: anyClass)) as? T
-        return view ?? T()
+        guard let view = dequeueReusableHeaderFooterView(withIdentifier: String(describing: anyClass)) as? T else {
+            fatalError("Unable to dequeue \(T.self) with identifier: \(String(describing: anyClass))")
+        }
+        return view
     }
-    
-    func registerCell<T: UITableViewCell>(_ anyClass: T.Type, nibType: Bool = true) {
-        return nibType
-            ? register(UINib(nibName: String(describing: anyClass), bundle: nil),
-                       forCellReuseIdentifier: String(describing: anyClass))
-            : register(anyClass, forCellReuseIdentifier: String(describing: anyClass))
+
+    func registerCell<T: UITableViewCell>(_ anyClass: T.Type, usingNib: Bool = true) {
+        let identifier = String(describing: anyClass)
+        usingNib
+            ? register(UINib(nibName: identifier, bundle: nil), forCellReuseIdentifier: identifier)
+            : register(anyClass, forCellReuseIdentifier: identifier)
     }
-    
-    func registerHeaderFooter<T: UITableViewHeaderFooterView>(_ anyClass: T.Type, nibType: Bool = true) {
-        return nibType
-            ? register(UINib(nibName: String(describing: anyClass), bundle: nil),
-                       forHeaderFooterViewReuseIdentifier: String(describing: anyClass))
-            : register(anyClass, forHeaderFooterViewReuseIdentifier: String(describing: anyClass))
+
+    func registerHeaderFooter<T: UITableViewHeaderFooterView>(_ anyClass: T.Type, usingNib: Bool = true) {
+        let identifier = String(describing: anyClass)
+        usingNib
+            ? register(UINib(nibName: identifier, bundle: nil), forHeaderFooterViewReuseIdentifier: identifier)
+            : register(anyClass, forHeaderFooterViewReuseIdentifier: identifier)
     }
 }
