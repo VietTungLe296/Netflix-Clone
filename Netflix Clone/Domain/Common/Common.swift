@@ -21,3 +21,9 @@ enum SortType {
     case nameAscending
     case nameDescending
 }
+
+enum AlertType {
+    case success
+    case error
+    case info
+}

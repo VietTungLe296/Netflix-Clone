@@ -46,11 +46,10 @@ final class HomeInteractor: HomeBusinessLogic {
         DataPersistenceManager.shared.downloadMovie(movie) { [weak self] result in
             switch result {
             case .success:
-                self?.presenter.showAlert(message: String(format: "Saved %@ successfully".localized, movie.displayTitle)) {
-                    NotificationCenter.default.post(name: .updateDownloadedMovieTab, object: nil, userInfo: nil)
-                }
+                self?.presenter.showBottomAlert(type: .success, message: String(format: "Saved %@ successfully".localized, movie.displayTitle))
+                NotificationCenter.default.post(name: .updateDownloadedMovieTab, object: nil, userInfo: nil)
             case .failure(let failure):
-                self?.presenter.showAlert(message: failure.localizedDescription)
+                self?.presenter.showBottomAlert(type: .error, message: failure.localizedDescription)
             }
         }
     }
@@ -96,7 +95,7 @@ final class HomeInteractor: HomeBusinessLogic {
             } catch {
                 await MainActor.run {
                     presenter.popLoading()
-                    presenter.didFetchMovieFailure(error: error)
+                    presenter.showBottomAlert(type: .error, message: error.localizedDescription)
                 }
             }
         }
@@ -118,7 +117,7 @@ final class HomeInteractor: HomeBusinessLogic {
             } catch {
                 await MainActor.run {
                     presenter.popLoading()
-                    presenter.didFetchMovieFailure(error: error)
+                    presenter.showBottomAlert(type: .error, message: error.localizedDescription)
                 }
             }
         }

@@ -125,8 +125,10 @@ extension DownloadedViewController: MovieTitleTableViewCellDelegate, DownloadedT
         
         switch sortType {
         case .nameAscending:
+            CommonViewPresenter.shared.showBottomAlert(type: .info, message: String(format: "Sort by %@".localized, "A-Z"))
             movieList.sort(by: { $0.displayTitle < $1.displayTitle })
         case .nameDescending:
+            CommonViewPresenter.shared.showBottomAlert(type: .info, message: String(format: "Sort by %@".localized, "Z-A"))
             movieList.sort(by: { $0.displayTitle > $1.displayTitle })
         }
        

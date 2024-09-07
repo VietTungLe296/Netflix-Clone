@@ -34,7 +34,7 @@ final class DiscoverSearchResultInteractor: DiscoverSearchResultBusinessLogic {
             } catch {
                 await MainActor.run {
                     presenter.hideLoading()
-                    presenter.showAlert(message: error.localizedDescription)
+                    presenter.showBottomAlert(type: .error, message: error.localizedDescription)
                 }
             }
         }

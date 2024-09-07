@@ -60,11 +60,10 @@ final class PreviewInteractor: PreviewBusinessLogic {
 
             switch result {
             case .success:
-                self.presenter.showAlert(message: String(format: "Saved %@ successfully".localized, dependencies.movie.displayTitle)) {
-                    NotificationCenter.default.post(name: .updateDownloadedMovieTab, object: nil, userInfo: nil)
-                }
+                self.presenter.showBottomAlert(type: .success, message: String(format: "Saved %@ successfully".localized, dependencies.movie.displayTitle))
+                NotificationCenter.default.post(name: .updateDownloadedMovieTab, object: nil, userInfo: nil)
             case .failure(let failure):
-                self.presenter.showAlert(message: failure.localizedDescription)
+                self.presenter.showBottomAlert(type: .error, message: failure.localizedDescription)
             }
         }
     }
