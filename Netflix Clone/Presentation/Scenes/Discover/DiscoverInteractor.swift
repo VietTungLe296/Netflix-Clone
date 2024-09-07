@@ -38,10 +38,10 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
                     presenter.hideLoading()
                     presenter.didFetchMovieSuccess(response.movieList, totalPages: response.totalPages)
                 }
-            } catch {
+            } catch let error as APIError {
                 await MainActor.run {
                     presenter.hideLoading()
-                    presenter.showBottomAlert(type: .error, message: error.localizedDescription)
+                    presenter.showBottomAlert(type: .error, message: error.message)
                 }
             }
         }
@@ -65,10 +65,10 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
 
                     presenter.didFetchYoutubeTrailer(for: movie, videoId: videoId, isAutoplay: isAutoplay)
                 }
-            } catch {
+            } catch let error as APIError {
                 await MainActor.run {
                     presenter.hideLoading()
-                    presenter.showBottomAlert(type: .error, message: error.localizedDescription)
+                    presenter.showBottomAlert(type: .error, message: error.message)
                 }
             }
         }
@@ -81,7 +81,7 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
                 self?.presenter.showBottomAlert(type: .success, message: String(format: "Saved %@ successfully".localized, movie.displayTitle))
                 NotificationCenter.default.post(name: .updateDownloadedMovieTab, object: nil, userInfo: nil)
             case .failure(let failure):
-                self?.presenter.showBottomAlert(type: .error, message: failure.localizedDescription)
+                self?.presenter.showBottomAlert(type: .error, message: failure.message)
             }
         }
     }

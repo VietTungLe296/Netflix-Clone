@@ -1,6 +1,17 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "An unknown error occurred. Please try again later." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Đã có lỗi xảy ra. Vui lòng thử lại sau."
+          }
+        }
+      }
+    },
     "Deleted %@ successfully" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -89,6 +100,17 @@
         }
       }
     },
+    "Please check the internet connection and try again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vui lòng kiểm tra lại kết nối Internet và thử lại."
+          }
+        }
+      }
+    },
     "Popular" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -129,6 +151,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sắp xếp theo %@"
+          }
+        }
+      }
+    },
+    "System busy. Please try again later." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hệ thống bận. Vui lòng thử lại sau."
+          }
+        }
+      }
+    },
+    "This movie has been downloaded." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phim này đã được tải xuống."
           }
         }
       }

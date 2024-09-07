@@ -36,7 +36,7 @@ final class DownloadedInteractor: DownloadedBusinessLogic {
                     self.presenter.didFetchMovieSuccess(movieList.sorted(by: { $0.displayTitle > $1.displayTitle }))
                 }
             case .failure(let failure):
-                self.presenter.showBottomAlert(type: .error, message: failure.localizedDescription)
+                self.presenter.showBottomAlert(type: .error, message: failure.message)
             }
         }
     }
@@ -59,10 +59,10 @@ final class DownloadedInteractor: DownloadedBusinessLogic {
 
                     presenter.didFetchYoutubeTrailer(for: movie, videoId: videoId, isAutoplay: isAutoplay)
                 }
-            } catch {
+            } catch let error as APIError {
                 await MainActor.run {
                     presenter.popLoading()
-                    self.presenter.showBottomAlert(type: .error, message: error.localizedDescription)
+                    self.presenter.showBottomAlert(type: .error, message: error.message)
                 }
             }
         }
@@ -75,7 +75,7 @@ final class DownloadedInteractor: DownloadedBusinessLogic {
                 self?.presenter.showBottomAlert(type: .success, message: String(format: "Deleted %@ successfully".localized, movie.displayTitle))
                 completion()
             case .failure(let failure):
-                self?.presenter.showBottomAlert(type: .error, message: failure.localizedDescription)
+                self?.presenter.showBottomAlert(type: .error, message: failure.message)
             }
         }
     }

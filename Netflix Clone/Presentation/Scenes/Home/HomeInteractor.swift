@@ -49,7 +49,7 @@ final class HomeInteractor: HomeBusinessLogic {
                 self?.presenter.showBottomAlert(type: .success, message: String(format: "Saved %@ successfully".localized, movie.displayTitle))
                 NotificationCenter.default.post(name: .updateDownloadedMovieTab, object: nil, userInfo: nil)
             case .failure(let failure):
-                self?.presenter.showBottomAlert(type: .error, message: failure.localizedDescription)
+                self?.presenter.showBottomAlert(type: .error, message: failure.message)
             }
         }
     }
@@ -92,10 +92,10 @@ final class HomeInteractor: HomeBusinessLogic {
 
                     presenter.didFetchYoutubeTrailer(for: movie, videoId: videoId, isAutoplay: isAutoplay)
                 }
-            } catch {
+            } catch let error as APIError {
                 await MainActor.run {
                     presenter.popLoading()
-                    presenter.showBottomAlert(type: .error, message: error.localizedDescription)
+                    presenter.showBottomAlert(type: .error, message: error.message)
                 }
             }
         }
@@ -114,10 +114,10 @@ final class HomeInteractor: HomeBusinessLogic {
                     presenter.popLoading()
                     presenter.didFetchMovieSuccess(response.movieList.filter { $0.imageURL != nil }, section: section)
                 }
-            } catch {
+            } catch let error as APIError {
                 await MainActor.run {
                     presenter.popLoading()
-                    presenter.showBottomAlert(type: .error, message: error.localizedDescription)
+                    presenter.showBottomAlert(type: .error, message: error.message)
                 }
             }
         }

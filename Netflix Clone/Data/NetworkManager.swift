@@ -18,12 +18,25 @@ final class NetworkManager {
             let (data, response) = try await URLSession.shared.data(for: request)
             
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                throw URLError(.badServerResponse)
+                throw APIError.serverError
             }
             
             return try JSONDecoder().decode(FetchMoviesResponse.self, from: data)
+            
         } catch {
-            throw error
+            if let urlError = error as? URLError {
+                if urlError.code == .notConnectedToInternet {
+                    throw APIError.networkError
+                } else {
+                    throw APIError.urlError
+                }
+            }
+            
+            if error is DecodingError {
+                throw APIError.decodeError
+            }
+            
+            throw APIError.others
         }
     }
     
@@ -35,12 +48,25 @@ final class NetworkManager {
             let (data, response) = try await URLSession.shared.data(for: request)
             
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                throw URLError(.badServerResponse)
+                throw APIError.serverError
             }
             
             return try JSONDecoder().decode(FetchMoviesResponse.self, from: data)
+            
         } catch {
-            throw error
+            if let urlError = error as? URLError {
+                if urlError.code == .notConnectedToInternet {
+                    throw APIError.networkError
+                } else {
+                    throw APIError.urlError
+                }
+            }
+            
+            if error is DecodingError {
+                throw APIError.decodeError
+            }
+            
+            throw APIError.others
         }
     }
     
@@ -50,12 +76,25 @@ final class NetworkManager {
             let (data, response) = try await URLSession.shared.data(for: request)
             
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                throw URLError(.badServerResponse)
+                throw APIError.serverError
             }
-
+            
             return try JSONDecoder().decode(FetchMoviesResponse.self, from: data)
+            
         } catch {
-            throw error
+            if let urlError = error as? URLError {
+                if urlError.code == .notConnectedToInternet {
+                    throw APIError.networkError
+                } else {
+                    throw APIError.urlError
+                }
+            }
+            
+            if error is DecodingError {
+                throw APIError.decodeError
+            }
+            
+            throw APIError.others
         }
     }
     
@@ -63,14 +102,27 @@ final class NetworkManager {
         do {
             let request = try createGetMoviesRequest(with: "/movie/popular")
             let (data, response) = try await URLSession.shared.data(for: request)
-            
+                
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                throw URLError(.badServerResponse)
+                throw APIError.serverError
             }
-            
+                
             return try JSONDecoder().decode(FetchMoviesResponse.self, from: data)
+                
         } catch {
-            throw error
+            if let urlError = error as? URLError {
+                if urlError.code == .notConnectedToInternet {
+                    throw APIError.networkError
+                } else {
+                    throw APIError.urlError
+                }
+            }
+                
+            if error is DecodingError {
+                throw APIError.decodeError
+            }
+                
+            throw APIError.others
         }
     }
     
@@ -78,14 +130,27 @@ final class NetworkManager {
         do {
             let request = try createGetMoviesRequest(with: "/trending/tv/\(type.rawValue)")
             let (data, response) = try await URLSession.shared.data(for: request)
-            
+                
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                throw URLError(.badServerResponse)
+                throw APIError.serverError
             }
-            
+                
             return try JSONDecoder().decode(FetchMoviesResponse.self, from: data)
+                
         } catch {
-            throw error
+            if let urlError = error as? URLError {
+                if urlError.code == .notConnectedToInternet {
+                    throw APIError.networkError
+                } else {
+                    throw APIError.urlError
+                }
+            }
+                
+            if error is DecodingError {
+                throw APIError.decodeError
+            }
+                
+            throw APIError.others
         }
     }
     
@@ -98,14 +163,27 @@ final class NetworkManager {
             
             let request = try createGetMoviesRequest(with: "/discover/movie", params: params)
             let (data, response) = try await URLSession.shared.data(for: request)
-            
+                
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                throw URLError(.badServerResponse)
+                throw APIError.serverError
             }
-            
+                
             return try JSONDecoder().decode(FetchMoviesResponse.self, from: data)
+                
         } catch {
-            throw error
+            if let urlError = error as? URLError {
+                if urlError.code == .notConnectedToInternet {
+                    throw APIError.networkError
+                } else {
+                    throw APIError.urlError
+                }
+            }
+                
+            if error is DecodingError {
+                throw APIError.decodeError
+            }
+                
+            throw APIError.others
         }
     }
     
@@ -116,20 +194,33 @@ final class NetworkManager {
             
             let request = try createGetMoviesRequest(with: "/search/movie", params: params)
             let (data, response) = try await URLSession.shared.data(for: request)
-            
+                
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                throw URLError(.badServerResponse)
+                throw APIError.serverError
             }
-            
+                
             return try JSONDecoder().decode(FetchMoviesResponse.self, from: data)
+                
         } catch {
-            throw error
+            if let urlError = error as? URLError {
+                if urlError.code == .notConnectedToInternet {
+                    throw APIError.networkError
+                } else {
+                    throw APIError.urlError
+                }
+            }
+                
+            if error is DecodingError {
+                throw APIError.decodeError
+            }
+                
+            throw APIError.others
         }
     }
     
     private func createGetMoviesRequest(with path: String, params: [String: String] = [:]) throws -> URLRequest {
         guard let url = URL(string: "\(AppConstants.movieDBBaseURL)\(path)") else {
-            throw URLError(.badURL)
+            throw APIError.urlError
         }
         
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
@@ -138,7 +229,7 @@ final class NetworkManager {
         components.queryItems?.append(contentsOf: params.compactMap { URLQueryItem(name: $0.key, value: $0.value) })
         
         guard let finalURL = components.url else {
-            throw URLError(.badURL)
+            throw APIError.urlError
         }
         
         var request = URLRequest(url: finalURL)
@@ -160,7 +251,7 @@ extension NetworkManager {
         
         do {
             guard let url = URL(string: AppConstants.youtubeBaseURL) else {
-                throw URLError(.badURL)
+                throw APIError.urlError
             }
             
             var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
@@ -170,7 +261,7 @@ extension NetworkManager {
                                                        URLQueryItem(name: "key", value: AppConfig.shared.youtubeToken)])
             
             guard let finalURL = components.url else {
-                throw URLError(.badURL)
+                throw APIError.urlError
             }
             
             var request = URLRequest(url: finalURL)
@@ -181,12 +272,24 @@ extension NetworkManager {
             let (data, response) = try await URLSession.shared.data(for: request)
             
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                throw URLError(.badServerResponse)
+                throw APIError.serverError
             }
             
             return try JSONDecoder().decode(FetchYoutubeVideosResponse.self, from: data)
         } catch {
-            throw error
+            if let urlError = error as? URLError {
+                if urlError.code == .notConnectedToInternet {
+                    throw APIError.networkError
+                } else {
+                    throw APIError.urlError
+                }
+            }
+                
+            if error is DecodingError {
+                throw APIError.decodeError
+            }
+                
+            throw APIError.others
         }
     }
 }

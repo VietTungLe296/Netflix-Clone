@@ -31,10 +31,10 @@ final class DiscoverSearchResultInteractor: DiscoverSearchResultBusinessLogic {
                     presenter.hideLoading()
                     presenter.didFetchMovieSuccess(response.movieList.filter { $0.imageURL != nil })
                 }
-            } catch {
+            } catch let error as APIError {
                 await MainActor.run {
                     presenter.hideLoading()
-                    presenter.showBottomAlert(type: .error, message: error.localizedDescription)
+                    presenter.showBottomAlert(type: .error, message: error.message)
                 }
             }
         }

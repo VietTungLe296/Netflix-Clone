@@ -13,7 +13,7 @@ final class DataPersistenceManager {
 
     private init() {}
 
-    func downloadMovie(_ movie: Movie, completion: @escaping (Result<Void, Error>) -> Void) {
+    func downloadMovie(_ movie: Movie, completion: @escaping (Result<Void, CoreDataError>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
 
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -38,14 +38,14 @@ final class DataPersistenceManager {
                 try managedContext.save()
                 completion(.success(()))
             } else {
-                completion(.failure(NSError(domain: "Trùng rồi", code: 0)))
+                completion(.failure(CoreDataError.duplicated))
             }
         } catch {
-            completion(.failure(error))
+            completion(.failure(CoreDataError.others))
         }
     }
 
-    func fetchDownloadedMovies(_ completion: @escaping (Result<[Movie], Error>) -> Void) {
+    func fetchDownloadedMovies(_ completion: @escaping (Result<[Movie], CoreDataError>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
 
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -58,11 +58,11 @@ final class DataPersistenceManager {
             let movieList = try managedContext.fetch(request)
             completion(.success(movieList.compactMap { Movie(from: $0) }))
         } catch {
-            completion(.failure(error))
+            completion(.failure(CoreDataError.others))
         }
     }
 
-    func deleteMovie(_ movie: Movie, _ completion: @escaping (Result<Void, Error>) -> Void) {
+    func deleteMovie(_ movie: Movie, _ completion: @escaping (Result<Void, CoreDataError>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
 
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -79,14 +79,14 @@ final class DataPersistenceManager {
                 try managedContext.save()
                 completion(.success(()))
             } else {
-                completion(.failure(NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Movie not found."])))
+                completion(.failure(CoreDataError.others))
             }
         } catch {
-            completion(.failure(error))
+            completion(.failure(CoreDataError.others))
         }
     }
 
-    func deleteAllDownloadedMovies(_ completion: @escaping (Result<Void, Error>) -> Void) {
+    func deleteAllDownloadedMovies(_ completion: @escaping (Result<Void, CoreDataError>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
 
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -100,7 +100,7 @@ final class DataPersistenceManager {
             try managedContext.save()
             completion(.success(()))
         } catch {
-            completion(.failure(error))
+            completion(.failure(CoreDataError.others))
         }
     }
 }
