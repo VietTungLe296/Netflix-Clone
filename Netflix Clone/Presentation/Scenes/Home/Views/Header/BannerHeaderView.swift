@@ -9,6 +9,7 @@ import UIKit
 
 protocol BannerHeaderViewDelegate: AnyObject {
     func didTapMovie(_ movie: Movie, isAutoplay: Bool)
+    func didDownloadMovie(_ movie: Movie)
 }
 
 final class BannerHeaderView: UIView {
@@ -46,6 +47,7 @@ final class BannerHeaderView: UIView {
     
     private func setupButtons() {
         playButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapPlay)))
+        downloadButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapDownload)))
     }
     
     private func setupCollectionView() {
@@ -76,6 +78,14 @@ final class BannerHeaderView: UIView {
         }
         
         delegate?.didTapMovie(movieList[currentIndexPath.row], isAutoplay: true)
+    }
+    
+    @objc private func didTapDownload() {
+        guard let currentIndexPath = carouselCollectionView.currentCenteredItemIndex() else {
+            return
+        }
+        
+        delegate?.didDownloadMovie(movieList[currentIndexPath.row])
     }
     
     @objc private func updatePageControlAndScroll() {
