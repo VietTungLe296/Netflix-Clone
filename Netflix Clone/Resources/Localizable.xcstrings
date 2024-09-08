@@ -12,6 +12,17 @@
         }
       }
     },
+    "Board cast" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phát rộng"
+          }
+        }
+      }
+    },
     "Deleted %@ successfully" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -52,6 +63,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Đã tải xuống"
+          }
+        }
+      }
+    },
+    "Feature %@ under development." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tính năng %@ đang phát triển."
           }
         }
       }
@@ -118,6 +140,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Không thể bỏ qua"
+          }
+        }
+      }
+    },
+    "Profile" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hồ sơ"
           }
         }
       }

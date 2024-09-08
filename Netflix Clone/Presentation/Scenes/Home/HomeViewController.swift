@@ -67,8 +67,8 @@ final class HomeViewController: UIViewController {
         navigationItem.leftBarButtonItem = logoItem
         
         navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(image: UIImage(systemName: "person"), style: .done, target: self, action: nil),
-            UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil),
+            UIBarButtonItem(image: UIImage(systemName: "person"), style: .done, target: self, action: #selector(didTapProfile)),
+            UIBarButtonItem(image: UIImage(systemName: "rectangle.inset.filled.and.person.filled"), style: .done, target: self, action: #selector(didTapBroadcast)),
         ]
         navigationItem.titleView = UIView()
         
@@ -83,6 +83,14 @@ final class HomeViewController: UIViewController {
         let bannerHeaderView = BannerHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         bannerHeaderView.delegate = self
         feedTableView.tableHeaderView = bannerHeaderView
+    }
+    
+    @objc private func didTapProfile() {
+        CommonViewPresenter.shared.showBottomAlert(type: .info, message: String(format: "Feature %@ under development.".localized, "Profile".localized))
+    }
+    
+    @objc private func didTapBroadcast() {
+        CommonViewPresenter.shared.showBottomAlert(type: .info, message: String(format: "Feature %@ under development.".localized, "Board cast".localized))
     }
 }
 
