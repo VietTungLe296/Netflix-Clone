@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SkeletonView
 
 protocol MovieTitleTableViewCellDelegate: AnyObject {
     func didTapMovie(_ movie: Movie, isAutoplay: Bool)

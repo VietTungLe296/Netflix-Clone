@@ -21,26 +21,18 @@ final class DiscoverInteractor: DiscoverBusinessLogic {
     }
 
     func fetchDiscoverMovies(page: Int, includeVideos: Bool, includeAdult: Bool, sortType: DiscoverSortType) {
-        presenter.showLoading()
-
         Task {
             do {
-                await MainActor.run {
-                    presenter.showLoading()
-                }
-
                 let response = try await NetworkManager.shared.fetchDiscoverMovies(page: page,
                                                                                    includeVideos: includeVideos,
                                                                                    includeAdult: includeAdult,
                                                                                    sortType: sortType)
 
                 await MainActor.run {
-                    presenter.hideLoading()
                     presenter.didFetchMovieSuccess(response.movieList, totalPages: response.totalPages)
                 }
             } catch let error as APIError {
                 await MainActor.run {
-                    presenter.hideLoading()
                     presenter.showBottomAlert(type: .error, message: error.message)
                 }
             }

@@ -27,6 +27,11 @@ final class PreviewViewController: UIViewController {
         setupView()
         fetchDataOnLoad()
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        CommonViewPresenter.shared.hideLoadingView()
+    }
 
     // MARK: Fetch Preview
 
@@ -42,12 +47,15 @@ final class PreviewViewController: UIViewController {
     private func setupView() {
         setupWebView()
         setupLabels()
+        CommonViewPresenter.shared.showLoadingView()
     }
 
     private func setupWebView() {
+        webView.navigationDelegate = self
+
         if isAutoplay {
             guard let videoId = interactor?.getVideoId() else { return }
-            
+
             let embedHTML = """
             <html>
             <body style="margin: 0px; padding: 0px;">
@@ -75,3 +83,13 @@ final class PreviewViewController: UIViewController {
 }
 
 extension PreviewViewController: PreviewDisplayLogic {}
+
+extension PreviewViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        CommonViewPresenter.shared.hideLoadingView()
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        CommonViewPresenter.shared.hideLoadingView()
+    }
+}
