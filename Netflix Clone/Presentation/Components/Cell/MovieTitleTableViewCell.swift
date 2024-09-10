@@ -5,8 +5,8 @@
 //  Created by Le Viet Tung on 29/8/24.
 //
 
-import UIKit
 import SkeletonView
+import UIKit
 
 protocol MovieTitleTableViewCellDelegate: AnyObject {
     func didTapMovie(_ movie: Movie, isAutoplay: Bool)
@@ -27,9 +27,7 @@ final class MovieTitleTableViewCell: UITableViewCell {
     func bind(with movie: Movie) {
         self.movie = movie
         
-        posterImageView.sd_setImage(with: movie.imageURL,
-                                    placeholderImage: UIImage(named: "default"),
-                                    context: nil)
+        posterImageView.fetchImage(url: movie.imageURL, placeholderImage: UIImage(named: "default"))
         
         titleLabel.text = movie.displayTitle
     }
