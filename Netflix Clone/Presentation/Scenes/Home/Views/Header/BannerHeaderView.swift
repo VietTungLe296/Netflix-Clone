@@ -5,6 +5,7 @@
 //  Created by Le Viet Tung on 11/08/2024.
 //
 
+import SkeletonView
 import UIKit
 
 protocol BannerHeaderViewDelegate: AnyObject {
@@ -113,7 +114,15 @@ final class BannerHeaderView: UIView {
     }
 }
 
-extension BannerHeaderView: UICollectionViewDataSource, UICollectionViewDelegate {
+extension BannerHeaderView: SkeletonCollectionViewDataSource, UICollectionViewDelegate {
+    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return String(describing: CarouselMovieCollectionViewCell.self)
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return movieList.count
     }

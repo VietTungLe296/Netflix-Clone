@@ -5,6 +5,7 @@
 //  Created by Le Viet Tung on 23/8/24.
 //
 
+import SkeletonView
 import UIKit
 
 final class CarouselMovieCollectionViewCell: UICollectionViewCell {
