@@ -5,6 +5,7 @@
 //  Created by Le Viet Tung on 11/08/2024.
 //
 
+import SkeletonView
 import UIKit
 
 protocol MovieCollectionTableCellDelegate: AnyObject {
@@ -22,6 +23,8 @@ final class MovieCollectionTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         setupCollectionView()
+        
+        showAnimatedGradientSkeleton()
     }
     
     private func setupCollectionView() {
@@ -34,12 +37,21 @@ final class MovieCollectionTableViewCell: UITableViewCell {
         self.movieList = movieList
         
         DispatchQueue.main.async { [weak self] in
+            self?.hideSkeleton()
             self?.movieCollectionView.reloadData()
         }
     }
 }
 
-extension MovieCollectionTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension MovieCollectionTableViewCell: SkeletonCollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return String(describing: CarouselMovieCollectionViewCell.self)
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return movieList.count
     }
@@ -63,7 +75,7 @@ extension MovieCollectionTableViewCell: UICollectionViewDataSource, UICollection
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let movie = movieList[indexPath.row]
         
-        let config = UIContextMenuConfiguration(actionProvider:  { _ in
+        let config = UIContextMenuConfiguration(actionProvider: { _ in
             let downloadAction = UIAction(title: "Download".localized,
                                           image: UIImage(systemName: "arrow.down.circle.fill"))
             { [weak self] _ in

@@ -5,7 +5,7 @@
 //  Created by Le Viet Tung on 23/8/24.
 //
 
-import SDWebImage
+import SkeletonView
 import UIKit
 
 final class CarouselMovieCollectionViewCell: UICollectionViewCell {
@@ -15,9 +15,7 @@ final class CarouselMovieCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
     }
 
-    func bind(with model: Movie) {
-        posterImageView.sd_setImage(with: model.imageURL, 
-                                    placeholderImage: UIImage(named: "default"),
-                                    context: nil)
+    func bind(with movie: Movie) {
+        posterImageView.fetchImage(url: movie.imageURL, placeholderImage: UIImage(named: "default"))
     }
 }

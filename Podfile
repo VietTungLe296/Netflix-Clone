@@ -6,5 +6,6 @@ target 'Netflix Clone' do
 # Pods for Netflix Clone
 pod 'SVProgressHUD'
 pod 'SDWebImage'
-  
+pod 'SkeletonView'
+
 end

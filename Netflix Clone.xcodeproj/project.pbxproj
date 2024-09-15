@@ -55,6 +55,7 @@
 		6C6F04AC2C85AAD800213AB1 /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C6F04AB2C85AAD800213AB1 /* PreviewViewController.xib */; };
 		6C6F04AE2C85B7F300213AB1 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6F04AD2C85B7F300213AB1 /* UIViewController+Extensions.swift */; };
 		6C6F04B02C8680EF00213AB1 /* NotificationCenter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6F04AF2C8680EF00213AB1 /* NotificationCenter+Extensions.swift */; };
+		6C8EBD432C91086F0033F263 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8EBD422C91086F0033F263 /* UIImageView+Extensions.swift */; };
 		6CA7B5532C870B4000EA98BF /* DownloadedTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA7B5522C870B4000EA98BF /* DownloadedTableHeaderView.swift */; };
 		6CA7B5552C870B4C00EA98BF /* DownloadedTableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6CA7B5542C870B4C00EA98BF /* DownloadedTableHeaderView.xib */; };
 		6CB727CA2C6764DA0008F9E2 /* HomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB727C52C6764DA0008F9E2 /* HomePresenter.swift */; };
@@ -130,6 +131,7 @@
 		6C6F04AB2C85AAD800213AB1 /* PreviewViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreviewViewController.xib; sourceTree = "<group>"; };
 		6C6F04AD2C85B7F300213AB1 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		6C6F04AF2C8680EF00213AB1 /* NotificationCenter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Extensions.swift"; sourceTree = "<group>"; };
+		6C8EBD422C91086F0033F263 /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
 		6CA7B5522C870B4000EA98BF /* DownloadedTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadedTableHeaderView.swift; sourceTree = "<group>"; };
 		6CA7B5542C870B4C00EA98BF /* DownloadedTableHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownloadedTableHeaderView.xib; sourceTree = "<group>"; };
 		6CB727C52C6764DA0008F9E2 /* HomePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePresenter.swift; sourceTree = "<group>"; };
@@ -425,6 +427,7 @@
 				6C6F04AD2C85B7F300213AB1 /* UIViewController+Extensions.swift */,
 				6C6F04AF2C8680EF00213AB1 /* NotificationCenter+Extensions.swift */,
 				6CD7A1572C8C81A7002D0956 /* UIApplication+Extensions.swift */,
+				6C8EBD422C91086F0033F263 /* UIImageView+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -653,6 +656,7 @@
 				6C6F04A82C85A8C000213AB1 /* PreviewInteractor.swift in Sources */,
 				6C6F040E2C69786300213AB1 /* Movie.swift in Sources */,
 				6C692BC62C86B815005B7000 /* NetflixCloneModel.xcdatamodeld in Sources */,
+				6C8EBD432C91086F0033F263 /* UIImageView+Extensions.swift in Sources */,
 				6CB727E32C676D560008F9E2 /* String+Extensions.swift in Sources */,
 				6C6F04962C8326BB00213AB1 /* SnappingCollectionViewFlowLayout.swift in Sources */,
 				6C6F045B2C7F514500213AB1 /* AppConfig.swift in Sources */,

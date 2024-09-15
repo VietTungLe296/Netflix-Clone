@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SkeletonView
 
 protocol HomeDisplayLogic: AnyObject {
     func displayFetchedMovieList(_ movieList: [Movie], forSection section: MovieSection)
@@ -82,7 +83,10 @@ final class HomeViewController: UIViewController {
         
         let bannerHeaderView = BannerHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         bannerHeaderView.delegate = self
+        bannerHeaderView.isSkeletonable = true
+        
         feedTableView.tableHeaderView = bannerHeaderView
+        bannerHeaderView.showAnimatedGradientSkeleton()
     }
     
     @objc private func didTapProfile() {
@@ -98,6 +102,7 @@ extension HomeViewController: HomeDisplayLogic {
     func displayFetchedMovieList(_ movieList: [Movie], forSection section: MovieSection) {
         if section == .trendingMovies {
             (feedTableView.tableHeaderView as? BannerHeaderView)?.bind(with: Array(movieList.prefix(5)))
+            (feedTableView.tableHeaderView as? BannerHeaderView)?.hideSkeleton()
             
             movieCaches[section.rawValue] = Array(movieList.dropFirst(5))
         } else {

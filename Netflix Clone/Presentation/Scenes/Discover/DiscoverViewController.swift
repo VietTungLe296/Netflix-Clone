@@ -5,6 +5,7 @@
 //  Created by Le Viet Tung on 30/8/24.
 //
 
+import SkeletonView
 import UIKit
 
 protocol DiscoverDisplayLogic: AnyObject {
@@ -51,6 +52,8 @@ final class DiscoverViewController: UIViewController {
     private func setupView() {
         setupNavigationBar()
         setupTableView()
+        
+        view.showAnimatedGradientSkeleton()
     }
     
     private func setupNavigationBar() {
@@ -91,8 +94,9 @@ extension DiscoverViewController: DiscoverDisplayLogic {
         self.movieList.append(contentsOf: movieList)
         self.totalPages = totalPages
         isFetchingMore = false
-         
+        
         DispatchQueue.main.async { [weak self] in
+            self?.view.hideSkeleton()
             self?.discoverTableView.reloadData()
         }
     }
@@ -103,7 +107,15 @@ extension DiscoverViewController: DiscoverDisplayLogic {
     }
 }
 
-extension DiscoverViewController: UITableViewDataSource, UITableViewDelegate {
+extension DiscoverViewController: SkeletonTableViewDataSource, UITableViewDelegate {
+    func collectionSkeletonView(_ skeletonView: UITableView, cellIdentifierForRowAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return String(describing: MovieTitleTableViewCell.self)
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 50
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movieList.count
     }

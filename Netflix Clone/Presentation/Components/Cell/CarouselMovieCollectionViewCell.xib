@@ -19,8 +19,11 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8LR-tI-Cfs">
                         <rect key="frame" x="0.0" y="0.0" width="111" height="118"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default" translatesAutoresizingMaskIntoConstraints="NO" id="kiN-iu-cr7">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kiN-iu-cr7">
                                 <rect key="frame" x="0.0" y="0.0" width="111" height="118"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -30,6 +33,9 @@
                             <constraint firstItem="kiN-iu-cr7" firstAttribute="top" secondItem="8LR-tI-Cfs" secondAttribute="top" id="e1E-XE-ute"/>
                             <constraint firstAttribute="trailing" secondItem="kiN-iu-cr7" secondAttribute="trailing" id="kxm-Fl-bgY"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+                        </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
             </view>
@@ -41,13 +47,13 @@
                 <constraint firstItem="8LR-tI-Cfs" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="bxi-hc-RMg"/>
             </constraints>
             <size key="customSize" width="111" height="118"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="boolean" keyPath="isSkeletonable" value="YES"/>
+            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="posterImageView" destination="kiN-iu-cr7" id="eR7-go-yLZ"/>
             </connections>
             <point key="canvasLocation" x="176.33587786259542" y="12.67605633802817"/>
         </collectionViewCell>
     </objects>
-    <resources>
-        <image name="default" width="335" height="151"/>
-    </resources>
 </document>
