@@ -1,27 +1,3 @@
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#netflix-clone">Netflix Clone</a>
-      <ul>
-        <li><a href="#description">Description</a></li>
-         <li><a href="#usage">Usage</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#technologies-used">Technologies used</a></li>
-    <li><a href="#screenshots">Screenshots</a></li>
-    <li><a href="#references">References</a></li>
-  </ol>
-</details>
-
 # Netflix Clone
 ## Description
 An application based on the general idea and design of Netflix from a basic UIKit YouTube course. I have extended the application with additional features like loading state when calling APIs, skeleton views, alphabetical sorting, hiding/showing toggle for adult contents when searching, success/error/info alerts (including exception handling), etc.
@@ -61,7 +37,7 @@ pod install
 3. Package Manager: CocoaPods
 4. 3rd party libraries: SVProgressHUD, SDWebImage, SkeletonView
 
-## Screenshots
+# Screenshots
 <img src="https://github.com/user-attachments/assets/7cbaa047-5fab-4755-9bc0-3115455bc3b2" alt="Home" width="300" height="650">
 <img src="https://github.com/user-attachments/assets/93109999-c421-4845-b7fd-35c4448828bd" alt="Home" width="300" height="650">
 <img src="https://github.com/user-attachments/assets/dac6f53d-88d8-47e4-8103-3b53d949ee7a" alt="Home" width="300" height="650">
